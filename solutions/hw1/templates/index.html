@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Research Desk · AI Research Assistant</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%233f72af'/%3E%3Ctext x='15' y='46' font-size='43' fill='white'%3Er%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/static/style.css"><script src="/static/app.js" defer></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="/"><span class="brand-mark">r<span>·</span></span><span>Research<br><b>Desk</b></span></a>
+    <div class="workspace-label">YOUR WORKSPACE</div>
+    <nav aria-label="Main navigation">
+      <button class="nav active" data-view="discover"><span>⌕</span> Discover papers <span class="nav-arrow">↗</span></button>
+      <button class="nav" data-view="library"><span>▤</span> My library <span id="library-count" class="count">0</span></button>
+    </nav>
+    <button id="model-setup" class="model-card" aria-label="Model settings"><span id="model-dot" class="dot"></span><span><b id="model-status">Checking model…</b><small>Model settings ↗</small></span></button>
+    <div class="sidebar-footer">RESEARCH DESK <span>01</span></div>
+  </aside>
+
+  <main>
+    <header class="topbar"><span><span class="tiny-square"></span> Workspace</span><button class="button upload-trigger">↑ Upload a PDF</button></header>
+    <section id="discover-view" class="view">
+      <div class="eyebrow">arXiv</div>
+      <h1>Discover papers.</h1>
+      <form id="search-form" class="search-box"><span class="search-icon" aria-hidden="true">⌕</span><label for="query" class="sr-only">Research topic or arXiv ID</label><input id="query" required minlength="2" maxlength="200" placeholder="Topic, keyword, or arXiv ID" autocomplete="off"><button class="button primary" type="submit" id="search-button">Search papers <span>→</span></button></form>
+      <div class="suggestions"><span>Try</span><button data-query="large language models">Large language models ↗</button><button data-query="software testing">Software testing ↗</button><button data-query="retrieval augmented generation">Retrieval augmented generation ↗</button></div>
+      <div class="section-heading"><h2 id="result-heading">Recently saved</h2><span class="muted">SEARCH POWERED BY arXiv</span></div>
+      <div id="search-results" aria-live="polite">
+        <div class="empty"><p>No saved papers.</p></div>
+      </div>
+    </section>
+    <section id="library-view" class="view" hidden>
+      <h1>My library.</h1>
+      <div class="library-toolbar"><h2>Saved papers</h2><label class="sr-only" for="library-filter">Filter saved papers</label><input id="library-filter" placeholder="Filter by title or author…"></div>
+      <div id="library-results" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <dialog id="paper-dialog" class="paper-dialog">
+    <div class="dialog-top"><span class="eyebrow">PAPER</span><button class="icon-button" data-close="paper-dialog" aria-label="Close paper">✕</button></div>
+    <div id="paper-head"></div>
+    <div class="paper-tabs" role="tablist"><button class="tab active" data-tab="overview" role="tab" aria-selected="true">Overview</button><button class="tab" data-tab="ai" role="tab" aria-selected="false">AI notebook <span>✳</span></button><button class="tab" data-tab="text" role="tab" aria-selected="false">Source text</button></div>
+    <div id="paper-body"></div>
+  </dialog>
+
+  <dialog id="upload-dialog" class="small-dialog">
+    <div class="dialog-top"><span class="eyebrow">ADD TO YOUR LIBRARY</span><button class="icon-button" data-close="upload-dialog" aria-label="Close upload">✕</button></div>
+    <h2>Upload PDF</h2><p class="muted">Title, authors, year, and abstract will be extracted for review.</p>
+    <form id="upload-form"><label class="drop-zone" for="pdf-file"><span>↑</span><b id="file-label">Choose a PDF paper</b><small>Up to 20 MB · 150 pages · text-based PDF</small><input type="file" id="pdf-file" accept="application/pdf,.pdf" required></label><p class="hint">When a model is configured, the first two pages are sent to it to improve metadata extraction.</p><button type="submit" id="upload-button" class="button primary full">Add to library →</button></form>
+  </dialog>
+
+  <dialog id="setup-dialog" class="small-dialog">
+    <div class="dialog-top"><span class="eyebrow">MODEL CONNECTION</span><button class="icon-button" data-close="setup-dialog" aria-label="Close model setup">✕</button></div>
+    <h2>Model setup</h2><p id="setup-status" class="muted"></p>
+    <p>Create <code>.env</code> in the application folder using <code>.env.example</code>. Set your provider's values, then restart the server:</p>
+    <pre>LLM_BASE_URL=https://api.openai.com/v1
+LLM_API_KEY=your-private-api-key
+LLM_MODEL=gpt-6-luna</pre>
+    <p class="hint">For Ollama, use <code>http://localhost:11434/v1</code>, key <code>ollama</code>, and an installed model name. Keys stay on the server.</p>
+    <p class="hint">AI actions send extracted paper text to your configured model provider. Search, saving, and PDF reading work without a model.</p>
+  </dialog>
+  <div id="toast" role="status" hidden></div>
+</body>
+</html>

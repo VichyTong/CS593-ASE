@@ -1,0 +1,32 @@
+test_deleting_one_record_preserves_shared_pdf (test_app.ApplicationTests.test_deleting_one_record_preserves_shared_pdf) ... [2026-10-01 23:14:48,824] ERROR in app: Unhandled request error
+Traceback (most recent call last):
+  File "/Users/tong172/Desktop/projects/593-ASE/solutions/hw1/.venv/lib/python3.11/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tong172/Desktop/projects/593-ASE/solutions/hw1/.venv/lib/python3.11/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tong172/Desktop/projects/593-ASE/solutions/hw1/app.py", line 229, in pdf_file
+    return send_file(uploads / row['pdf_path'], mimetype='application/pdf',
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tong172/Desktop/projects/593-ASE/solutions/hw1/.venv/lib/python3.11/site-packages/flask/helpers.py", line 518, in send_file
+    return werkzeug.utils.send_file(  # type: ignore[return-value]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tong172/Desktop/projects/593-ASE/solutions/hw1/.venv/lib/python3.11/site-packages/werkzeug/utils.py", line 421, in send_file
+    stat = os.stat(path)
+           ^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/var/folders/gx/2xg3r_d176d1zh_442btlgmc0000gr/T/tmpzb4nq8ue/uploads/43b1f3c991defd686bd4afbfc59ae95d210a7ed571893aecb9b71c4222e715ad.pdf'
+FAIL
+
+======================================================================
+FAIL: test_deleting_one_record_preserves_shared_pdf (test_app.ApplicationTests.test_deleting_one_record_preserves_shared_pdf)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/tong172/Desktop/projects/593-ASE/solutions/hw1/tests/test_app.py", line 157, in test_deleting_one_record_preserves_shared_pdf
+    self.assertEqual(response.status_code, 200)
+AssertionError: 500 != 200
+
+----------------------------------------------------------------------
+Ran 1 test in 0.025s
+
+FAILED (failures=1)
