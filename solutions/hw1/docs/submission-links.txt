@@ -1,0 +1,10 @@
+CS593 HW1 - AI Research Assistant
+
+GitHub repository:
+https://github.com/VichyTong/CS593-ASE
+
+Application source and setup instructions:
+https://github.com/VichyTong/CS593-ASE/tree/main/solutions/hw1
+
+Submission guide:
+https://github.com/VichyTong/CS593-ASE/blob/main/solutions/hw1/docs/SUBMISSION_CHECKLIST.md
