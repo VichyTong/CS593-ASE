@@ -16,5 +16,6 @@ Live AI evidence: solutions/hw1/docs/evidence/live-ai-verification.json
 Fresh-environment checks: solutions/hw1/docs/evidence/submission-checks.json
 
 Report personalized from the student's October 9 account. Pull the Overleaf project before synchronizing future edits.
+Verified publication: GitHub application/materials commit 5952063; Overleaf report commit d64719e.
 Pending: final student read-through, confirm grader access to GitHub, Brightspace submission.
 Current external limitation: arXiv returned HTTP 429 during the October 9 check.

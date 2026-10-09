@@ -19,7 +19,7 @@ The brief says **October 10, 11:59 PM**. It does not explicitly state a timezone
 - [x] README describing the features, architecture, limitations, tests, and deployment options.
 - [x] Credentials excluded from Git and kept on the server.
 - [x] Existing repository link: https://github.com/VichyTong/CS593-ASE.
-- [ ] Review and commit/push this local version so the submitted link contains these changes.
+- [x] Review and commit/push this version: application and personalized materials published October 9 in commit `5952063`; remote commit verified.
 - [x] Run the README instructions in a clean environment: fresh Python 3.11 environment, example configuration, dependency installation/check, 14 passing tests, actual HTTP startup/upload, and restart persistence verified October 9. That day's live arXiv request returned HTTP 429; earlier successful live checks are recorded separately.
 - [ ] Confirm grader access. The Git remote works with the current account, but anonymous GitHub access returned 404 on October 9.
 
