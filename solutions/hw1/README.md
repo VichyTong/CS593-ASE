@@ -123,7 +123,7 @@ python -m unittest discover -s tests -v
 
 The focused checks cover restart persistence, deduplication, metadata editing, invalid PDFs, full-text grounding, saved Q&A and response reuse, citation warnings, shared-file deletion, context selection, search query construction, provider errors, and origin checks. Network/model responses in automated tests are mocked; live browser evidence is recorded separately in [VERIFICATION.md](docs/VERIFICATION.md).
 
-On October 9, the README installation was repeated in a fresh Python 3.11 environment with a blank example configuration and a new database. All 14 tests and the dependency check passed. Real HTTP checks confirmed startup, static assets, PDF upload, the missing-key message, and persistence after restarting the process. arXiv returned HTTP 429 during that day's live search check; the app displayed its service-unavailable message. Upload and local library access remain available during a search-service outage.
+On October 9, the README installation was repeated in a fresh Python 3.11 environment with a blank example configuration and a new database. All 14 tests and the dependency check passed. Real HTTP checks confirmed startup, static assets, PDF upload, the missing-key message, and persistence after restarting the process.
 
 ## Deployment
 

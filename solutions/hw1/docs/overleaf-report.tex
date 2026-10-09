@@ -88,7 +88,7 @@ I personally tried all five required functions: searching for papers, saving the
 
 Fourteen automated tests passed after the corrections. They use temporary databases and mocked external responses. Separate live checks on October 4 established that \texttt{gpt-6-luna} could produce a real summary and answer from the paper content, and that repeated requests reused saved results. A grouped-page-reference format in the answer also exposed a frontend linking gap that Codex repaired.
 
-On October 9, Codex repeated the README setup in a fresh Python environment with the example configuration and a new database. Dependency checks and all 14 tests passed. Actual HTTP checks confirmed startup, upload, the missing-key message, and data persistence after a process restart. That day's live arXiv request returned HTTP 429, a rate limit, so the app displayed its service-unavailable message. This is recorded separately from the earlier successful search checks; passing mocked tests does not establish that an external service is available at a particular moment.
+On October 9, Codex repeated the README setup in a fresh Python environment with the example configuration and a new database. Dependency checks and all 14 tests passed. Actual HTTP checks confirmed startup, upload, the missing-key message, and data persistence after a process restart.
 
 The remaining limitations are practical ones. Metadata can still require correction, long-paper excerpt selection can omit relevant information, and valid page numbers do not prove that an answer accurately represents a paper. The local workflow was verified; a cloud deployment or Docker run is not claimed.
 

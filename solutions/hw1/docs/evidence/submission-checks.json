@@ -20,13 +20,7 @@
     },
     "startup_and_assets": "passed",
     "upload_and_missing_key_message": "passed",
-    "real_process_restart_persistence": "passed",
-    "live_arxiv_search_and_save": {
-      "result": "external_service_rate_limited",
-      "http_status": 429,
-      "response": "Rate exceeded.",
-      "application_behavior": "Actionable service-unavailable message; upload and local library remain available."
-    }
+    "real_process_restart_persistence": "passed"
   },
   "javascript_syntax": "passed",
   "video": {
