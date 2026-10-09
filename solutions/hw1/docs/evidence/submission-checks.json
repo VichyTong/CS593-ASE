@@ -1,0 +1,67 @@
+{
+  "verified_on": "2026-10-09",
+  "timezone": "America/Indiana/Indianapolis",
+  "python": "3.11.4",
+  "fresh_environment": true,
+  "configuration": "blank .env.example; fresh SQLite storage; no local secrets copied",
+  "dependency_installation": "passed",
+  "pip_check": "passed",
+  "unittest": {
+    "passed": 14,
+    "failed": 0,
+    "external_services": "mocked"
+  },
+  "http_checks": {
+    "blank_configuration": {
+      "llm_configured": false,
+      "model": "gpt-6-luna",
+      "provider_host": "api.openai.com",
+      "search_provider": "arXiv"
+    },
+    "startup_and_assets": "passed",
+    "upload_and_missing_key_message": "passed",
+    "real_process_restart_persistence": "passed",
+    "live_arxiv_search_and_save": {
+      "result": "external_service_rate_limited",
+      "http_status": 429,
+      "response": "Rate exceeded.",
+      "application_behavior": "Actionable service-unavailable message; upload and local library remain available."
+    }
+  },
+  "javascript_syntax": "passed",
+  "video": {
+    "duration_seconds": 88,
+    "resolution": "1440x1080",
+    "fps": 24,
+    "decoded_frames": 2112,
+    "full_decode": "passed",
+    "representative_scenes_inspected": 9,
+    "format": "captioned sequence of actual screenshots; not continuous screen recording"
+  },
+  "credentials": {
+    "candidate_files_with_known_local_credentials": 0,
+    "tracked_env_files": 0
+  },
+  "github_anonymous_http_status": 404,
+  "grader_access": "unconfirmed",
+  "live_llm": "verified October 4; no additional paid model calls during this preflight",
+  "verified_application_sha256": {
+    "app.py": "a948cc1006a7cd1ca75068f606fe206812cf26c0d220d2c64479ed28f97a873b",
+    "database.py": "3e153005810e995971dfa6c8392353a67c6c8295f8df48f3a397de12678678e3",
+    "pdf_tools.py": "e9635f2032566c0c01587308b33d13dc9a12a01c741f39aea2a5ea83fce205ff",
+    "providers.py": "ba5fe1427719500a87dd43cc974ffb42e2b9768d64d5a96660f63aa4e557dd38",
+    "requirements.txt": "b3db19aae9d1051397fb95d81e83757025405c0ae7d56565875a0bb7d1b88aae",
+    "tests/test_app.py": "bbccebb8c6c116db5ee030e7788920060c34bfa8c2ac9f31f211b4c4bc999ace",
+    "static/app.js": "d80fcce74f130279f9b513b6e7bf6418810d1b62230dbed1fa479496a8851621",
+    "static/style.css": "97eb4fffd68900d2136f4283fcae4b801708e6ba0109a661a04fcd30b53494b1",
+    "templates/index.html": "77db1563c9d335a272d9e4c6a2d5c74c6747231a2ac31c992a83634ab3e3498a"
+  },
+  "report": {
+    "pages": 7,
+    "compile": "pdfLaTeX passed",
+    "personal_prompts_remaining": 0,
+    "figure_sources": "3 original conversation screenshots and 2 vector evidence pages",
+    "personal_input_date": "2026-10-09",
+    "report_text_color": "black"
+  }
+}

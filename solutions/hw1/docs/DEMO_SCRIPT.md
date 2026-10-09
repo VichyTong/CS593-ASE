@@ -1,23 +1,31 @@
-# Demo video
+# Papertrail demo script
 
-`demo.mp4` is a captioned walkthrough assembled from genuine browser screenshots captured during successful live operation. It shows real search results, saved papers, uploaded metadata, a real GPT-6 Luna summary, a real answer, and source evidence. It is an edited screenshot walkthrough, not a continuous screen recording. No model answer or search result was fabricated. You may submit it if that format is acceptable to the instructor, or use the following script for a continuous personal recording.
+Target length: 2-3 minutes. Use the running app at http://127.0.0.1:8000. Record the browser window, without exposing `.env` or an API key.
 
-## Suggested continuous recording (2–3 minutes)
+The assignment explicitly requires search, save, PDF upload, a generated summary, and at least one answered question. A complete demo must show real model output. The app does not contain a mock/demo AI mode.
 
-Start the app using the README and open http://127.0.0.1:8000. Keep keys, terminals displaying configuration, and unrelated windows out of the recording.
+## Before recording
 
-| Approximate time | Action | Suggested narration |
+1. Configure a working model in `.env` and restart the app.
+2. Check that **AI settings** shows the expected model, then verify one real summary.
+3. Download the public PDF [Attention Is All You Need](https://arxiv.org/pdf/1706.03762). Its arXiv record is [1706.03762](https://arxiv.org/abs/1706.03762).
+4. Use a separate `DATA_DIR` if you want an empty demo library. Keep that directory through restarts to demonstrate persistence. Do not delete your own research library just to reset the demo.
+
+## Recording sequence
+
+| Time | Action | Suggested narration |
 | --- | --- | --- |
-| 0:00–0:15 | Show the main screen | "Research Desk is my HW1 AI Research Assistant. It uses Flask, SQLite, arXiv, and GPT-6 Luna." |
-| 0:15–0:35 | Search `1810.04805` or a research topic | "Search results include the title, authors, year, abstract, and original paper link." |
-| 0:35–0:50 | Save a result; open My library; refresh | "Saved papers remain in the local SQLite library across refreshes and restarts." |
-| 0:50–1:15 | Upload a text-based research PDF; review metadata | "PDF upload extracts title, authors, year, abstract, and page-numbered text. The extracted metadata can be corrected." |
-| 1:15–1:40 | Open AI notebook; generate a summary | "The summary uses the PDF's text. It records its coverage and includes page references." |
-| 1:40–2:05 | Ask about datasets and baselines | "This answer is generated from the selected paper. I can expand a cited page to compare the claim with the evidence." |
-| 2:05–2:20 | Repeat the question | "An identical question returns the saved result without another API charge. Prompt caching also reduces repeated input cost for different questions." |
+| 0:00-0:15 | Open Discover | “This is Papertrail, an AI research assistant built with Codex. It brings discovery, a persistent library, and paper analysis into one workspace.” |
+| 0:15-0:40 | Search `software testing`, then search `1706.03762` | “Search calls the arXiv API. Results include the title, authors, year, abstract, and original paper link. An exact arXiv ID finds a known paper.” |
+| 0:40-0:55 | Save the result, open My library, refresh | “The paper is saved to SQLite. It remains available after a page refresh or server restart.” |
+| 0:55-1:20 | Upload the PDF and inspect metadata | “Uploaded PDFs are processed locally. This paper’s arXiv identifier matches its bibliographic record. Other papers use PDF text and optional AI extraction. Details are editable.” |
+| 1:20-1:55 | Open AI summary, click Generate summary | “The model reads extracted PDF content, rather than just the title or abstract. The summary covers the research question, method, findings, limitations, and takeaway. Page references connect it to the source.” |
+| 1:55-2:25 | Ask “What datasets are used, and what results are reported?” | “The answer is grounded in this paper’s text. I can expand the excerpts and follow a page reference. The question and answer are saved with the paper.” |
+| 2:25-2:45 | Click a page reference, refresh, return to AI summary | “Source text remains inspectable, and the analysis persists. The interface also adapts to smaller screens.” |
 
-For the demonstrated paper, a useful question is: "What datasets are used, and what are the main results compared with the baselines?"
+## Accuracy notes
 
-The downloaded arXiv PDF can be obtained from the paper's **Download PDF** button. Upload it through the file picker to demonstrate the upload path. A search result and its uploaded PDF may appear as separate entries because their source identifiers differ, but they can safely share the stored PDF.
-
-The original live demonstration made three paid requests total: summary, metadata extraction, and question answering. Reusing cached results during the recording is intentional; explain that rather than claiming each replay makes a fresh API request.
+- Do not claim a live model check from automated tests; those tests mock model responses.
+- If the provider is unavailable, resolve it before recording the summary/Q&A segments. A setup dialog is not a successful AI demonstration.
+- If a captioned walkthrough is assembled from screenshots, label it as such. It should show actual completed actions and results, not reconstructed or fabricated application output.
+- A continuous screen recording is the strongest demonstration of interaction. The script can be used to make one with your preferred screen recorder.

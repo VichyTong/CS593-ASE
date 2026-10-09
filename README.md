@@ -1,7 +1,9 @@
 # CS593 — Advanced Software Engineering
 
-## Homework 1
+## Homework 1: Papertrail
 
-[Research Desk: AI Research Assistant](solutions/hw1/README.md)
+A clean, light research workspace for discovering papers, collecting them in a persistent library, uploading PDFs, and using an LLM to summarize and question their contents.
 
-Source code, setup instructions, deployment configuration, verification records, and submission materials are in `solutions/hw1`.
+Start with [the application README](solutions/hw1/README.md), then review [the submission checklist](solutions/hw1/docs/SUBMISSION_CHECKLIST.md).
+
+Application source and submission materials are in `solutions/hw1/`.

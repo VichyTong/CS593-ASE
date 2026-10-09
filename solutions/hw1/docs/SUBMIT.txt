@@ -1,0 +1,43 @@
+CS593 Homework 1 提交材料
+截止：10 月 10 日 23:59（以课程 / Brightspace 时区为准）
+
+在 Brightspace 提交以下三项：
+
+1. GitHub 仓库链接
+   https://github.com/VichyTong/CS593-ASE
+   作业目录：solutions/hw1
+   运行说明：solutions/hw1/README.md
+
+2. 演示视频
+   demo.mp4（88 秒）
+   覆盖搜索、保存、PDF 上传、真实 LLM 摘要和问答。
+   此视频由真实应用截图及字幕组成，不是连续操作录屏。
+
+3. 反思报告
+   reflection.pdf（7 页）
+   已填入你 10 月 9 日提供的个人经历；黑色正文；包含三张原始对话截图和矢量应用证据。
+   Overleaf：https://www.overleaf.com/project/6ac7d8e49907ab7405d67d38
+   reflection-overleaf.pdf 与 reflection.pdf 内容完全相同。
+   如果在 Overleaf 继续修改，请重新编译并下载最终 PDF 后再提交。
+
+提交前还需要你处理：
+- 通读报告，确认英文表述符合你的真实经历。
+- 确认老师能访问 GitHub 仓库。10 月 9 日匿名访问返回 404；当前账户可以连接仓库。
+- 在 Brightspace 上传视频和报告，并填写仓库链接。代理尚未提交 Brightspace。
+
+已完成的技术检查：
+- 全新 Python 3.11 环境按 README 安装成功，依赖检查通过。
+- 14 项自动化测试通过；前端脚本语法检查通过。
+- 实际 HTTP 启动、PDF 上传、缺少 API key 时的提示，以及服务重启后数据保留均通过。
+- 视频完整解码通过，9 个场景抽样检查完成。
+- API key、运行数据库和虚拟环境不纳入 Git。
+
+当前外部服务限制：
+10 月 9 日 arXiv 搜索接口返回 HTTP 429（限流），应用会显示暂时不可用提示。
+此前真实搜索和 LLM 摘要、问答验证已有记录；今天没有重复进行付费模型调用。
+上传 PDF 和本地资料库不依赖搜索服务的可用性。
+
+材料说明：
+Figure 2 与 Figure 3 展示 AI 接入尚未完成、你配置 API / 指定模型、以及代理报告成功验证的过程。
+搜索 / 元数据内部调试及后续 PDF 渲染纠正没有单独的对话截图；如有原始截图可进一步补强。
+旧 reflection-draft.pdf 和 demo-preview.mp4 不是本次提交文件。

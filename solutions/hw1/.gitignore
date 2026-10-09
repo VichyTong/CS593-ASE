@@ -1,7 +1,8 @@
 .venv/
-__pycache__/
-*.pyc
 .env
 data/
-.DS_Store
-.pytest_cache/
+__pycache__/
+*.pyc
+# Older local review artifacts; submit docs/reflection.pdf and docs/demo.mp4.
+docs/reflection-draft.pdf
+docs/demo-preview.mp4

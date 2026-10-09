@@ -1,0 +1,66 @@
+{
+  "verified_at": "2026-10-04T14:38:19.655618+00:00",
+  "paper": "Attention Is All You Need",
+  "source_id": "1706.03762",
+  "page_count": 15,
+  "model": "gpt-6-luna",
+  "reasoning_effort": "none",
+  "live_results": [
+    {
+      "kind": "summary",
+      "question": "",
+      "answer": "### Research question\nCan sequence transduction be performed effectively without recurrent or convolutional layers, using attention alone—and does this make models faster and more parallelizable while preserving or improving quality? The authors also test whether the approach generalizes to English constituency parsing. [pp. 1–2, 9]\n\n### Approach\nThe paper introduces the Transformer, an encoder–decoder architecture built from stacked self-attention and position-wise feed-forward layers. It uses multi-head attention, positional encodings, residual connections, and layer normalization; the decoder masks future positions to preserve autoregressive generation. The standard model has six encoder and six decoder layers. [pp. 3–5]\n\nThe authors evaluate machine translation on WMT 2014 English–German and English–French, and parsing on the Penn Treebank, including a semi-supervised setting. [pp. 7–10]\n\n### Key findings\nThe authors report that the Transformer is more parallelizable than recurrent models and can be trained faster. On English–German, the large model achieved **28.4 BLEU**, which the paper says exceeded the best previously reported results, including ensembles, by more than 2 BLEU; training took **3.5 days on eight P100 GPUs**. On English–French, the paper reports **41.8 BLEU** in its abstract and results table, while the main results paragraph reports **41.0**—an internal discrepancy in the supplied text. [pp. 1, 8]\n\nFor parsing, the Transformer achieved **91.3 F1** when trained on WSJ data only and **92.7 F1** semi-supervised. The authors characterize the latter as better than previously reported models except the Recurrent Neural Network Grammar. [pp. 9–10]\n\n### Limitations\nThe paper notes that full self-attention has quadratic sequence-length cost and may be less suitable for very long inputs; restricted local attention is proposed as future work, not evaluated here. [pp. 6–7, 10] The parsing evaluation involved only a small number of experiments, and the authors say they did little task-specific tuning. [p. 9] The reported English–French score differs between sections of the paper. [pp. 1, 8]\n\n### Takeaway\nThe paper presents attention-only sequence transduction as a strong alternative to recurrent and convolutional architectures. Its translation and parsing results support the authors’ claim that the Transformer can combine competitive quality with greater training parallelism, while leaving efficient handling of long sequences as an open challenge. [pp. 1, 8–10]",
+      "model": "gpt-6-luna",
+      "coverage": "Full extracted text",
+      "warning": "",
+      "created_at": "2026-10-04 14:36:29",
+      "cited_pages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "source_pages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "repeat_request_cached": true
+    },
+    {
+      "kind": "question",
+      "question": "What datasets are used, and what results are reported?",
+      "answer": "The paper reports experiments on **machine translation** and **English constituency parsing**:\n\n- **WMT 2014 English–German:** About 4.5 million sentence pairs, encoded with byte-pair encoding and a shared vocabulary of about 37,000 tokens. The Transformer big model scores **28.4 BLEU** on the test set; the base model scores **27.3 BLEU**. [pp. 7–8]\n- **WMT 2014 English–French:** 36 million sentence pairs, using a 32,000-token word-piece vocabulary. The paper’s results table reports **41.8 BLEU** for the big model and **38.1 BLEU** for the base model. The results discussion separately says the big model scores **41.0 BLEU**, so the paper contains an inconsistency. [pp. 7–8]\n- **English constituency parsing:** The Wall Street Journal portion of the Penn Treebank, with about 40,000 training sentences, and a semi-supervised setup additionally using high-confidence and BerkeleyParser corpora (about 17 million sentences). On WSJ Section 23, the Transformer scores **91.3 F1** when trained on WSJ only and **92.7 F1** in the semi-supervised setting. [pp. 9–10]\n\nThe authors also report that the big translation model was trained on eight P100 GPUs for 3.5 days. [pp. 7–8]",
+      "model": "gpt-6-luna",
+      "coverage": "Full extracted text",
+      "warning": "",
+      "created_at": "2026-10-04 14:37:03",
+      "cited_pages": [
+        7,
+        8,
+        9,
+        10
+      ],
+      "source_pages": [
+        7,
+        8,
+        9,
+        10
+      ],
+      "repeat_request_cached": true
+    }
+  ]
+}

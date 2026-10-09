@@ -2,10 +2,8 @@ FROM python:3.11-slim
 WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-COPY app.py database.py pdf_tools.py providers.py ./
-COPY templates ./templates
-COPY static ./static
 RUN useradd --create-home researcher && mkdir /app/data && chown researcher:researcher /app/data
+COPY --chown=researcher:researcher . .
 USER researcher
 ENV DATA_DIR=/app/data
 EXPOSE 8000

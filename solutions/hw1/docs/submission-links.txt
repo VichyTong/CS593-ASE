@@ -1,10 +1,20 @@
-CS593 HW1 - AI Research Assistant
+Repository: https://github.com/VichyTong/CS593-ASE
+Homework directory: solutions/hw1
+Local app: http://127.0.0.1:8000
+Setup: solutions/hw1/README.md
+Submission guide: solutions/hw1/docs/SUBMIT.txt
+Checklist: solutions/hw1/docs/SUBMISSION_CHECKLIST.md
+Reflection source: solutions/hw1/docs/REFLECTION.md
+Reflection PDF: solutions/hw1/docs/reflection.pdf
+Editable Overleaf report: https://www.overleaf.com/project/6ac7d8e49907ab7405d67d38
+Overleaf source mirror: solutions/hw1/docs/overleaf-report.tex
+Identical compiled Overleaf copy: solutions/hw1/docs/reflection-overleaf.pdf
+Vector application evidence: solutions/hw1/docs/evidence/application-evidence.pdf
+Demo recording plan: solutions/hw1/docs/DEMO_SCRIPT.md
+Five-flow demo: solutions/hw1/docs/demo.mp4
+Live AI evidence: solutions/hw1/docs/evidence/live-ai-verification.json
+Fresh-environment checks: solutions/hw1/docs/evidence/submission-checks.json
 
-GitHub repository:
-https://github.com/VichyTong/CS593-ASE
-
-Application source and setup instructions:
-https://github.com/VichyTong/CS593-ASE/tree/main/solutions/hw1
-
-Submission guide:
-https://github.com/VichyTong/CS593-ASE/blob/main/solutions/hw1/docs/SUBMISSION_CHECKLIST.md
+Report personalized from the student's October 9 account. Pull the Overleaf project before synchronizing future edits.
+Pending: final student read-through, confirm grader access to GitHub, Brightspace submission.
+Current external limitation: arXiv returned HTTP 429 during the October 9 check.

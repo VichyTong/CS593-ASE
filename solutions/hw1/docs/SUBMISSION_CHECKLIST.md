@@ -1,54 +1,52 @@
-# HW1 submission checklist
+# Homework 1 submission checklist
 
-## 中文提交指南
+The brief says **October 10, 11:59 PM**. It does not explicitly state a timezone; confirm the course/Brightspace timezone. The application is 60% of the homework grade and the reflection is 40%.
 
-提交地点：课程 **Brightspace 的 HW1 作业入口**。作业要求提交以下三项，不是只交代码。
+## Application
 
-| 要交什么 | 文件或链接 | 当前状态 |
+| Requirement | Implementation | Verification |
 | --- | --- | --- |
-| GitHub 仓库链接 | https://github.com/VichyTong/CS593-ASE | 已推送；代码、运行说明和依赖配置在 `solutions/hw1/` |
-| 简短演示视频 | `demo.mp4` | 已生成 1 分 44 秒的真实界面截图剪辑版；建议正式提交前按 `DEMO_SCRIPT.md` 录一遍实际操作，清楚展示五项功能 |
-| 使用 coding agent 的反思报告 | `reflection.pdf`；可编辑原稿 `REFLECTION.md` | 草稿已写好，但需要你审阅、补充个人体验和真实聊天截图后再提交 |
+| Graphical frontend and backend | Responsive Papertrail UI and Flask API | Browser checked on desktop/mobile |
+| External paper search | arXiv API with full result metadata, sorting, and pages | Real ID and keyword queries checked |
+| Persistent local library | SQLite papers and analysis history | Browser refresh, server restart, and integration test |
+| PDF upload and metadata | pypdf, identifier enrichment, optional model extraction, review form | Real 15-page research paper verified |
+| LLM summary from paper content | Full-text extraction and bounded page-preserving context | Real `gpt-6-luna` summary verified October 4 |
+| Paper Q&A | Text-grounded answers, page references, saved history | Real answer, citation navigation, refresh persistence, and cache reuse verified |
 
-### 按这个顺序完成
+## Repository
 
-1. 阅读 `REFLECTION.md`，把体验与判断改成你本人认可的表述。报告要回答作业中的五个问题；反思占 HW1 的 40%。
-2. 按 `SCREENSHOTS_TO_ADD.md` 截取这次聊天中的真实交互，重点展示你的指令、出现的问题、以及后续纠正。放进报告对应段落，再导出最终 PDF。工具无法截取 Codex 本身，所以这一步目前需要你提供截图；应用界面截图不能替代聊天截图。
-3. 检查演示视频。当前 `demo.mp4` 是截图剪辑，不是连续操作录像。作业没有明确要求连续录屏，但录下真实的搜索、保存、上传、生成摘要、提问过程，会更直接地展示要求。已有逐步脚本，无需重新设计演示内容。
-4. 打开 Brightspace 的 HW1 提交入口：提供仓库链接，上传最终演示视频与反思 PDF。仓库链接也保存在本目录的 `submission-links.txt` 中，便于复制；若入口只接受附件，可一并附上该文件。具体可用输入框和上传限制以课程页面为准。
-5. 提交后确认 Brightspace 显示提交成功，并检查附件能够打开、仓库对评分人员可访问。这里尚未代你登录或提交 Brightspace。
+- [x] Complete source, dependency pins, configuration example, and run/setup instructions.
+- [x] README describing the features, architecture, limitations, tests, and deployment options.
+- [x] Credentials excluded from Git and kept on the server.
+- [x] Existing repository link: https://github.com/VichyTong/CS593-ASE.
+- [ ] Review and commit/push this local version so the submitted link contains these changes.
+- [x] Run the README instructions in a clean environment: fresh Python 3.11 environment, example configuration, dependency installation/check, 14 passing tests, actual HTTP startup/upload, and restart persistence verified October 9. That day's live arXiv request returned HTTP 429; earlier successful live checks are recorded separately.
+- [ ] Confirm grader access. The Git remote works with the current account, but anonymous GitHub access returned 404 on October 9.
 
-截止时间：作业写的是 **10 月 10 日 23:59**，未注明时区，以课程页面为准。
+## Demo video
 
-提交代码不需要上传本地 `.env`、API Key、虚拟环境或运行数据库；这些已从 Git 排除。
+- [x] Real screenshots of search, saving, upload, corrected metadata, reading, and responsive layout.
+- [x] `DEMO_SCRIPT.md` provides the complete five-flow recording plan.
+- [x] Configure `.env`, restart the app, and verify a real generated summary and answered question.
+- [x] Complete `demo.mp4` with all five required flows. The 88-second captioned walkthrough uses actual browser screenshots and real AI responses. Use `DEMO_SCRIPT.md` if you prefer a continuous screen recording.
 
----
+## Reflection report
 
-## Application (60%)
+- [x] `REFLECTION.md` covers all five required discussion topics with observed development events.
+- [x] Actual failure evidence and correction details are preserved.
+- [x] Personalized seven-page report uploaded to [Overleaf](https://www.overleaf.com/project/6ac7d8e49907ab7405d67d38) on October 9. Local compilation and visual inspection passed. Application figures retain vector text; original conversation screenshots are included.
+- [x] Replace all five personal prompts using the student's October 9 account and remove the draft notice. Black report text retained.
+- [ ] Student reads the finished wording before submission.
+- [x] Add genuine Codex conversation screenshots: Figures 1-3 show the initial prompt, initial delivery/setup exchange, and model-selection follow-up with the reported verification result. Added October 8; individual debugging exchanges are not pictured.
+- [x] Explain the incomplete AI setup and the student's corrective configuration/model input alongside Figures 2 and 3. The separate search/metadata debugging exchanges are not pictured; additional original captures could strengthen those examples.
+- [x] Compile the personalized report to `reflection.pdf`; `reflection-overleaf.pdf` is an identical copy. Older draft/preview artifacts are not submission files.
 
-- [x] Graphical frontend and backend.
-- [x] External paper search with title, authors, publication year, abstract, and source link.
-- [x] Save and browse papers in persistent SQLite storage.
-- [x] PDF upload, text extraction, automatic metadata extraction, and metadata review.
-- [x] LLM summary based on paper content.
-- [x] Natural-language paper questions and source references.
-- [x] GPT-6 Luna configuration, prompt cache, local result cache, and $5 spending ceiling.
-- [x] Setup instructions, requirements, environment example, and deployment configuration.
-- [x] Automated checks and actual live browser verification.
+## Final submission
 
-## Submission materials
+- [x] Check repository candidates for local credentials and common token patterns; keep `.env` and runtime data out of Git.
+- [ ] Confirm the repository is accessible to the grader.
+- [x] Check that the video plays and includes search, save, upload, summary, and one answered question.
+- [x] Include the student's own discussion and original chat evidence; final wording still requires the student's read-through.
+- [ ] Submit the repository link, video, and report on Brightspace.
 
-- Repository: https://github.com/VichyTong/CS593-ASE
-- Application: `solutions/hw1/`
-- Video: `solutions/hw1/docs/demo.mp4` (captioned, edited walkthrough from real screenshots).
-- Reflection: `solutions/hw1/docs/REFLECTION.md` and `reflection.pdf` (agent-assisted draft).
-
-## Student actions before Brightspace submission
-
-- [ ] Read and personalize the reflection so it accurately describes your own experience.
-- [ ] Add the authentic coding-agent interaction screenshots listed in `SCREENSHOTS_TO_ADD.md`.
-- [ ] Watch the video. If a continuous recording is preferred or required, record using `DEMO_SCRIPT.md`.
-- [ ] Reproduce the key workflows and inspect the code so you can explain the application.
-- [ ] Submit the repository link, video, and finalized reflection to Brightspace.
-
-The assignment states a due date of **October 10, 11:59 PM**. Confirm the course's timezone in Brightspace. Public deployment is discussed in the overview but no separate deployed-URL item appears in the listed submission materials; this project includes local execution and deployment configuration, not a claimed hosted URL.
+See `VERIFICATION.md` for the precise difference between implemented, tested with mocks, and verified live. The agent has not submitted anything to Brightspace.
