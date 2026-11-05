@@ -40,19 +40,17 @@
 {\normalsize Weixi Tong\hfill November 2, 2026\par}
 \vspace{12pt}
 
-I used Codex to write tests for Papertrail, the web application from Homework 1. I first asked it to generate a test suite, then gave it feedback in two rounds. I kept the application code the same so I could compare the tests fairly.
+I used each test run, together with Codex's review, to decide what to ask for next. The initial results pointed to missing PDF cases. After those cases were added, the remaining gaps pointed to service handling and weak checks of saved results. This report explains how those observations shaped the two improvement prompts and how I judged their results.
 
 \reportsection{1. Test Generation Approach}
 
-Papertrail lets users search arXiv, save papers, upload PDFs, generate summaries, and ask questions about a paper. It uses Flask, SQLite, and pypdf, with a JavaScript frontend.
-
-I asked Codex to read the README, application code, and existing tests, then generate tests for normal use, edge cases, and errors. My first prompt included:
+Papertrail, my Homework 1 application, lets users search arXiv, save papers, upload PDFs, generate summaries, and ask questions about a paper. It uses Flask, SQLite, and pypdf, with a JavaScript frontend. I began with a broad request to read the application and its requirements, then write tests for its main functions:
 \begin{quote}
 \small
 Generate meaningful, executable tests for the main functionality, including normal cases, edge cases, and error handling. Prefer the existing unittest framework unless there is a clear reason to change it.
 \end{quote}
 
-Codex used \texttt{unittest} and the Flask test client. The initial suite had 37 test methods.
+This gave me a starting point for finding out where more guidance was needed. Codex used \texttt{unittest} and the Flask test client, producing 37 methods.
 
 \begin{center}
 \small
@@ -68,72 +66,67 @@ Individual functions & 8 & Database transactions, text selection, citations, and
 \end{tabularx}
 \end{center}
 
-The tests used temporary databases and generated sample PDFs. Calls to arXiv and the model used fixed sample responses. This allowed the tests to run without network access or paid requests. The tests checked returned values, saved records, PDF files, and whether the right requests were made.
+The tests used temporary databases and generated sample PDFs. Calls to arXiv and the model used fixed sample responses. This made it possible to compare runs without depending on a live service, while still testing the application's handling of those responses.
 
-The 14 tests from Homework 1 were excluded from the main comparison. Older HW2 files were also excluded. The reported results come from the three folders \texttt{initial\_stage}, \texttt{round1\_stage}, and \texttt{round2\_stage}.~[1--4]
+I preserved the initial tests and results before asking for changes. I also kept the application code the same throughout the experiment, so changes in coverage would reflect changes to the tests. All stages measured the same four Python files with coverage.py 7.17.0: \texttt{app.py}, \texttt{database.py}, \texttt{pdf\_tools.py}, and \texttt{providers.py}.
+
+Codex could inspect existing tests, but the 14 Homework 1 tests and older HW2 experiments were excluded from the reported totals. The comparison uses the three versions in \texttt{initial\_stage}, \texttt{round1\_stage}, and \texttt{round2\_stage}.~[1--4]
 
 \reportsection{2. Initial Test Evaluation}
 
-\reportsubsection{Coverage and correctness}
-
-The initial run passed 35 of 37 methods. Two methods failed on three input cases. There were no test errors or skipped tests. The suite covered 474 of 522 executable lines (90.80\%) and 135 of 174 branch outcomes (77.59\%).
-
-The saved initial output ends with:
+The first run passed 35 of 37 methods and covered 474/522 executable lines (90.80\%) and 135/174 branch outcomes (77.59\%). Its saved output ended with:
 \begin{reportcode}
 Ran 37 tests in 0.563s
 
 FAILED (failures=3)
 \end{reportcode}
 
-All stages measured the same four files: \texttt{app.py}, \texttt{database.py}, \texttt{pdf\_tools.py}, and \texttt{providers.py}. Coverage was measured with coverage.py 7.17.0 using the same settings. Frontend code was outside this measurement.
+Before deciding on the next prompt, I needed to understand the failures. Two methods failed on three input cases; none failed because of a setup error. Codex's review linked them to two application bugs.
 
-Codex reviewed the test inputs and expected results against the README and sample data. It found no incorrect expectations, but some checks needed improvement. One timeout test started with an empty library, so it could miss an error that deleted saved papers. Another test counted saved answers without checking their contents. The PDF samples all supplied title and author information, so they did not test how well the app could find that information in the page text.
-
-Some new tests overlap with the Homework 1 tests, which are excluded from these totals. Similar upload tests check different results: successful storage, duplicate handling, and rejection without leaving files. No tests were removed as duplicates during the experiment.
-
-Fixed service responses and a controlled clock reduce dependence on network conditions and timing. We did not run enough repetitions to measure how often a test might pass on one run and fail on another.
-
-The main coverage gaps were PDF limits, PDF metadata extraction, cache expiry, redirects, and failed downloads. For example, \texttt{pdf\_tools.py} had only 74.77\% line coverage and 59.62\% branch coverage.
-
-\reportsubsection{Two bugs found}
-
-\textbf{Bug 1: invalid analysis input causes a server error.}
-Sending \texttt{\{"kind": []\}} or \texttt{\{"kind": \{\}\}} to the analysis endpoint returned HTTP 500. The expected result was HTTP 400 with an input error. The app checked the value in a set before checking its type. The detecting method in \texttt{test\_validation.py} was:
+\textbf{Bug 1: invalid analysis input caused a server error.}
+An analysis request with \texttt{\{"kind": []\}} or \texttt{\{"kind": \{\}\}} returned HTTP 500 rather than an input error 400. The app checked the value in a set before checking its type. The detecting method in \texttt{test\_validation.py} was:
 \begin{reportcode}
 test_invalid_analysis_payloads_are_client_errors_without_provider_calls
 \end{reportcode}
 
-\textbf{Bug 2: an unusual page number causes a server error.}
-The search request \texttt{page=\%C2\%B2} contains the superscript character \textsuperscript{2}. It passed \texttt{isdigit()}, but \texttt{int()} could not convert it. The app returned HTTP 500 instead of the expected input error 400. The detecting method was:
+\textbf{Bug 2: an unusual page number caused a server error.}
+The search value \texttt{page=\%C2\%B2} contains the superscript character \textsuperscript{2}. It passed \texttt{isdigit()}, but \texttt{int()} could not convert it. The app again returned 500 rather than 400. The detecting method was:
 \begin{reportcode}
 test_invalid_search_parameters_are_client_errors
 \end{reportcode}
 
-The expected 400 responses follow how the app handles other invalid inputs. The recorded test output shows the actual 500 responses. Bug 1 has two failing input cases, so these two bugs produced three failures in the output.~[2]
+The expected 400 responses followed how the app handled other invalid inputs. I therefore kept the expectations and recorded the failures as application problems. Bug 1 has two failing inputs, which explains the three failure events. These results showed that the initial suite could already detect bugs, but they did not tell me which important behavior it had missed.~[2]
+
+To choose the first improvement, I looked at the per-file coverage and the sample data. The overall 90.80\% line coverage hid a much weaker area: \texttt{pdf\_tools.py} had 74.77\% line coverage and only 59.62\% branch coverage. The review also showed that the sample PDFs already supplied title and author information. A successful upload of those samples gave little evidence about finding missing metadata from the page text.
+
+This combination made PDF handling the first priority. It linked a measured gap to a specific weakness in the inputs, so I could give Codex a more useful request than simply asking for additional tests. The review also noted limits in error-message checks and a homepage test that only confirmed HTML delivery. Those observations left a separate question about how much the checks actually proved. I focused the first round on the PDF gap and returned to that question in round 2.
+
+The review found no incorrect expected results. Some new tests overlapped with Homework 1 tests, which remained outside the comparison. Similar upload tests checked different outcomes, such as successful storage, duplicate handling, and rejection without saved files; no tests were removed as duplicates.
 
 \reportsection{3. Iterative Test Improvement}
 
-\reportsubsection{Round 1: clearer PDF requirements}
+\reportsubsection{Round 1: change what the PDF samples could reveal}
 
-I first asked Codex to focus on PDF handling. I specified file-size, page-count, and text-length limits; PDFs without saved title or author information; and failures during optional AI metadata extraction. Part of my feedback was:
+I used the initial review to ask for file-size, page-count, and text-length boundaries, PDFs without supplied metadata, and failures during optional AI metadata extraction. I also made the expected effect of a rejected upload explicit:
 \begin{quote}
 \small
 For rejected uploads, verify that no paper record or orphaned PDF file is created.
 \end{quote}
 
-Codex kept the original 37 methods and added eight. The new tests checked a PDF at the app's 20 MiB limit and one byte above it, PDFs with 0, 1, 150, and 151 pages, and text just below, at, and above one million characters. Rejected uploads had to leave no database record or file behind.
+The reason for this instruction was that an error response alone would not show whether the failed request had left unwanted data behind. Similarly, removing the supplied PDF metadata would make the app use the extraction path that the original samples had avoided.
 
-The new samples also tested finding a title, authors, and publication year from the PDF text. Other tests checked that a failed AI metadata request still allowed the app to save the PDF and its locally extracted information.
+Codex retained the initial 37 methods and added eight. It tested the app's 20 MiB limit and one byte above it, 0/1/150/151-page PDFs, and text just below, at, and above one million characters. It also checked that a failed AI metadata request still allowed the app to save the PDF with its locally extracted information.
 
-This round passed 42 of 45 methods. All 35 methods that passed initially still passed. Coverage rose to 505/522 lines (96.74\%) and 151/174 branch outcomes (86.78\%). The PDF module reached 98.20\% line coverage and 88.46\% branch coverage.~[3]
+The README did not define the unit in \texttt{20 MB} more precisely, so these boundary tests used the app's current 20 MiB setting. This was a stated assumption in the round 1 notes.
+
+The run passed 42 of 45 methods. All 35 previously passing methods still passed. Coverage rose to 96.74\% for lines and 86.78\% for branches, with the PDF module reaching 98.20\% and 88.46\%. However, one new method failed, so the pass rate had fallen. I needed to inspect that result before treating the round as successful or unsuccessful.~[3]
 
 \begin{minipage}{\linewidth}
-\textbf{Bug 3: part of a title is saved as an author.}
-One sample had a two-line title followed by a separate author line. The app saved the second title line as an extra author:
+\textbf{Bug 3: a title continuation was saved as an author.}
+The new sample had a two-line, 24-point title above a separate 12-point author line. The app returned:
 \begin{reportcode}
 Title:    Reliable Storage for
           Research Libraries
-Authors:  Dana Tester and Evan Researcher
 Expected: ['Dana Tester', 'Evan Researcher']
 Actual:   ['Research Libraries', 'Dana Tester', 'Evan Researcher']
 \end{reportcode}
@@ -144,43 +137,43 @@ The detecting method in \texttt{test\_pdf\_round1.py} was:
 test_multiline_prominent_title_is_not_misidentified_as_an_author
 \end{reportcode}
 
-The wrong author appeared in both the response and the database. This was a simple, clearly labeled sample; more complicated PDF layouts were not tested. The first two bugs remained, so the suite now showed three failed methods and four failure events.~[3]
+The sample's heading and author line had clear roles, and the wrong author appeared in both the response and the database. That supported treating it as an application mistake. The new failure also explained the lower pass rate: the added test had exposed a problem that the earlier samples could not reveal. I kept the check and counted the round as an improvement in bug detection. It did not establish that all PDF layouts would be handled correctly.
 
-\reportsubsection{Round 2: use the results to improve the remaining tests}
+\reportsubsection{Round 2: follow the remaining gaps and inspect the checks}
 
-For the second round, I pointed Codex to the actual round 1 \texttt{coverage.json} and \texttt{experiment-notes.txt}. I asked for better tests of search caching, request timing, redirects, large downloads, and interrupted downloads. My feedback included this measured gap:
+After reviewing round 1, I changed the focus. PDF coverage had improved considerably, while \texttt{providers.py} still had only 76.09\% branch coverage. The round 1 review also continued to note limits in the existing checks. I used these findings to shape the second prompt: exercise the remaining service behavior and ask Codex to review what the tests actually checked.
+
+I pointed Codex to the actual round 1 \texttt{coverage.json} and \texttt{experiment-notes.txt}. The feedback included:
 \begin{quote}
 \small
 PDF handling improved substantially, while providers.py still has 76.09\% branch coverage.
 \end{quote}
-
-I also asked:
+It also asked:
 \begin{quote}
 \small
 Also review existing provider and error-handling assertions. Strengthen any that could pass despite incorrect results or state, and explain concrete examples.
 \end{quote}
 
-Codex added ten methods. These checked whether search results expired after ten minutes, whether different searches reused the correct results, and whether requests waited for the required interval. A controlled clock allowed these timing tests to run without real waiting. Other tests checked downloads, bad service responses, and missing model settings.
+This led to ten new methods. For example, the initial cache test repeated a search immediately. That could show reuse, but could not establish whether an expired result was refreshed or whether different searches got their own results. The new tests checked the ten-minute boundary and different query, page, and sort values. A controlled clock allowed timing checks without real waiting. Download tests checked that interruptions and rejected transfers preserved the saved paper and left no partial file.
 
-Four existing methods also gained better checks. A timeout test now saved a paper first and verified that it survived. A download failure had to leave the record and files unchanged. A retry test checked the exact saved answer and whether it was reused. A redirect test checked the request destination.
-
-For example, the last check in the earlier retry test only counted saved answers:
+That review led Codex to strengthen four existing methods. For example, it found that the earlier retry test ended by counting answers. A successful response and a count of one would still allow the wrong text to be saved:
 \begin{reportcode}
 self.assertEqual(len(self.detail(paper['id'])['analyses']), 1)
 \end{reportcode}
-The improved test added these checks:
+The revised test added these selected checks:
 \begin{reportcode}
 analysis = succeeded.json['analysis']
 self.assertEqual(analysis['answer'], answer)
 self.assertEqual(analysis['kind'], 'summary')
 \end{reportcode}
-Here, \texttt{answer} is the known sample model response. The earlier count could pass if the saved text was wrong. The added checks require the correct text and task. These are selected lines from the recorded test change in \texttt{test\_validation.py}.~[4]
+Here, \texttt{answer} is the known sample response. These checks require the expected text and task. Codex also found that the timeout test started with an empty library, so it changed the setup to save a paper first and verify that it survived. This is how the request to review existing checks led to concrete changes, even where code was already covered.~[4]
 
-The final suite passed 52 of 55 methods. All ten new methods and the four improved methods passed. No new bug was found. The same three application bugs still caused the same four failure events. The external-service module reached 98.46\% line coverage and 95.65\% branch coverage.~[4]
+The result was 52 passes out of 55 methods. All ten additions and four strengthened methods passed, while the same three application bugs still produced four failure events. Service-code coverage reached 98.46\% for lines and 95.65\% for branches. I interpreted this as evidence of better coverage and more specific checks. The observed bug count stayed at three, so this round did not demonstrate another increase in bugs found.
 
+\clearpage
 \reportsection{4. Final Evaluation}
 
-The table compares the three suites on the same application code. The earlier results were kept as recorded.
+The two rounds answered different problems raised by the preceding output. The first changed the PDF inputs and revealed an additional bug. The second used the remaining coverage gaps and weak checks to examine service behavior more closely. The table shows their results on the same application code; the bug column counts distinct bugs found so far.
 
 \begin{center}
 \small
@@ -196,14 +189,14 @@ Round 2 & 52 / 55 & 98.47\% & 91.95\% & 3 \\
 \end{tabular}
 \end{center}
 
-The final suite covered 514/522 lines and 160/174 branch outcomes. All stages had zero test errors and zero skipped tests. The saved final output ends with:
+The final suite covered 514/522 lines and 160/174 branch outcomes. All stages had zero test errors and zero skipped tests. The final saved output ended with:
 \begin{reportcode}
 Ran 55 tests in 13.357s
 
 FAILED (failures=4)
 \end{reportcode}
 
-The following table shows line coverage / branch coverage for each file.
+The per-file results show why the focus moved from PDFs to services. Each value below is line coverage / branch coverage, in percent.
 
 \begin{center}
 \small
@@ -218,35 +211,27 @@ File & Initial & Round 1 & Round 2 \\
 \texttt{providers.py} & 89.23 / 73.91 & 91.54 / 76.09 & 98.46 / 95.65 \\
 \bottomrule
 \end{tabular}
-
-{\small All values are percentages.\par}
 \end{center}
 
-The first round improved PDF coverage and found a new bug. The second round improved service handling and checked saved data more carefully, but found no additional bug. Some stronger checks did not increase coverage because the earlier tests already ran those lines.
+Coverage alone does not capture the whole improvement. Checking the saved answer more carefully can improve a test even when it executes the same lines. Conversely, a higher pass count does not mean the app was repaired: all previously passing methods continued to pass, more methods were added, and the known bugs remained.
 
-The final review found no incorrect expected results. Coverage shows how much code ran; it does not show that every result was checked correctly. For example, a saved answer can exist but contain the wrong text. Also, the higher final pass rate came from adding passing tests, not from fixing the app. The three known bugs were left in place for the comparison.
-
-Eight executable lines and fourteen branch outcomes were still not covered. The missed cases include deleting a paper while a model answer is being generated, rejecting unusually complex PDF data, and removing an old search result when the cache is full. These remain gaps even though the overall percentages are high.
+The final review found no incorrect expected results, but eight lines and fourteen branch outcomes were still uncovered. They include deleting a paper while a model answer is being generated, rejecting unusually complex PDF data, and removing an old search result when the cache is full. I kept these as limits of the result rather than treating the high coverage as proof that the application was fully tested.
 
 \reportsection{5. Reflection}
 
-Codex understood the main application functions and wrote useful tests for saving papers, uploading PDFs, and handling summaries and questions. It was also good at creating sample data and checking database and file contents.
+I learned to use pass/fail counts as a starting point for review. The new PDF failure was useful because it could be traced to a clearly described sample. The passing retry test still needed work because its last check could miss the wrong answer. These examples made inspecting the inputs and checks as important as reading the coverage report.
 
-Its first version missed less obvious cases. The PDF samples were too simple, some error tests did not protect existing data, and an immediate repeat of a search did not test cache expiry. Clear examples and actual test results helped it address these gaps. Asking for a specific behavior was more useful than simply asking for more tests.
+Codex was effective at turning focused feedback into executable tests. Its first version was less effective at choosing difficult PDF samples and checking saved content. I would make sample data and expected results clearer in the first request, then continue using actual results to choose the next step. The useful input to the agent was our explanation of a weakness and the behavior we wanted the test to verify.
 
-I learned to review what each test checks, even when it passes. A test that counts answers is weaker than one that checks the answer itself. I would use the same approach again: keep the first result, give focused feedback, and compare both coverage and the checks made by the tests.
+The use of fixed responses and a controlled clock reduced dependence on real services and timing. We did not run enough repetitions to measure how often a test might fail only sometimes. The experiment also did not test browser interaction, actual model answer quality, complicated PDF layouts, simultaneous requests, or crashes. Those limits follow from the kinds of tests used.
 
-These tests do not cover browser interaction, real service availability, actual model answer quality, or all PDF layouts. They also do not establish how the app behaves during simultaneous requests or a crash. Those limits remain despite the high backend coverage.
-
-Codex helped prepare the prompts, tests, and report. I directed the two improvement rounds. I did not manually edit the tests or fix the application during this experiment.
+Codex helped review the outputs and prepare the prompts, tests, and report. I used that analysis to direct the two improvement rounds. I did not manually edit the tests or fix the application during this comparison.
 
 \reportsection{6. GitHub Repository}
 
 Repository: \url{https://github.com/VichyTong/CS593-ASE}.
 
-The final tests are in \path{solutions/hw2/round2_stage/tests/}. The PDF report and LaTeX source are in \path{solutions/hw2/docs/}. The HW2 README explains the files and recorded results.
-
-\reportsubsection{Install and run}
+The final tests are in \path{solutions/hw2/round2_stage/tests/}. The report and LaTeX source are in \path{solutions/hw2/docs/}. Full prompts, review notes, and recorded results are saved alongside each stage.
 
 From the repository root, use Python 3.11 or newer:
 \begin{reportcode}
@@ -258,13 +243,9 @@ TASK_PY=/tmp/papertrail-hw2-venv/bin/python
   --output /tmp/papertrail-hw2-final-run
 \end{reportcode}
 
-Use a new output directory each time. The runner saves test output, \texttt{results.json}, \texttt{coverage.json}, and an HTML coverage report. It checks that the recorded application and earlier test files are still present and unchanged, so keep the three stage folders together.
+Use a new output directory each time and keep the recorded stage files together. The runner checks those files before starting and saves test output, \texttt{results.json}, \texttt{coverage.json}, and HTML coverage. Use the separate line and branch values in \texttt{results.json} to compare with this report.
 
-On the recorded application, the expected result is 52 passed methods, three failed methods, and four failure events. The command returns exit code 1 because the three known bugs are still present. The tests use temporary data and fixed service responses, so no API key is needed.
-
-\reportsubsection{Supporting records}
-
-The quoted prompts, test results, and coverage reports are saved here:
+On the recorded application, the expected result is 52 passed methods, three failed methods, and four failure events. Exit code 1 reflects the three known bugs. Temporary data and fixed service responses allow the tests to run without an API key.
 
 {\small\raggedright
 \textbf{[1]} \path{solutions/hw1/README.md}: application requirements.
