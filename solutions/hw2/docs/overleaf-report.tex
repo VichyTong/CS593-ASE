@@ -78,9 +78,20 @@ The 14 tests from Homework 1 were excluded from the main comparison. Older HW2 f
 
 The initial run passed 35 of 37 methods. Two methods failed on three input cases. There were no test errors or skipped tests. The suite covered 474 of 522 executable lines (90.80\%) and 135 of 174 branch outcomes (77.59\%).
 
+The saved initial output ends with:
+\begin{reportcode}
+Ran 37 tests in 0.563s
+
+FAILED (failures=3)
+\end{reportcode}
+
 All stages measured the same four files: \texttt{app.py}, \texttt{database.py}, \texttt{pdf\_tools.py}, and \texttt{providers.py}. Coverage was measured with coverage.py 7.17.0 using the same settings. Frontend code was outside this measurement.
 
 Codex reviewed the test inputs and expected results against the README and sample data. It found no incorrect expectations, but some checks needed improvement. One timeout test started with an empty library, so it could miss an error that deleted saved papers. Another test counted saved answers without checking their contents. The PDF samples all supplied title and author information, so they did not test how well the app could find that information in the page text.
+
+Some new tests overlap with the Homework 1 tests, which are excluded from these totals. Similar upload tests check different results: successful storage, duplicate handling, and rejection without leaving files. No tests were removed as duplicates during the experiment.
+
+Fixed service responses and a controlled clock reduce dependence on network conditions and timing. We did not run enough repetitions to measure how often a test might pass on one run and fail on another.
 
 The main coverage gaps were PDF limits, PDF metadata extraction, cache expiry, redirects, and failed downloads. For example, \texttt{pdf\_tools.py} had only 74.77\% line coverage and 59.62\% branch coverage.
 
@@ -116,6 +127,7 @@ The new samples also tested finding a title, authors, and publication year from 
 
 This round passed 42 of 45 methods. All 35 methods that passed initially still passed. Coverage rose to 505/522 lines (96.74\%) and 151/174 branch outcomes (86.78\%). The PDF module reached 98.20\% line coverage and 88.46\% branch coverage.~[3]
 
+\begin{minipage}{\linewidth}
 \textbf{Bug 3: part of a title is saved as an author.}
 One sample had a two-line title followed by a separate author line. The app saved the second title line as an extra author:
 \begin{reportcode}
@@ -125,6 +137,7 @@ Authors:  Dana Tester and Evan Researcher
 Expected: ['Dana Tester', 'Evan Researcher']
 Actual:   ['Research Libraries', 'Dana Tester', 'Evan Researcher']
 \end{reportcode}
+\end{minipage}
 
 The detecting method in \texttt{test\_pdf\_round1.py} was:
 \begin{reportcode}
@@ -135,7 +148,13 @@ The wrong author appeared in both the response and the database. This was a simp
 
 \reportsubsection{Round 2: use the results to improve the remaining tests}
 
-For the second round, I pointed Codex to the round 1 coverage report and test results. The code for external services still had only 76.09\% branch coverage. I asked for better tests of search caching, request timing, redirects, large downloads, and interrupted downloads. I also asked:
+For the second round, I pointed Codex to the actual round 1 \texttt{coverage.json} and \texttt{experiment-notes.txt}. I asked for better tests of search caching, request timing, redirects, large downloads, and interrupted downloads. My feedback included this measured gap:
+\begin{quote}
+\small
+PDF handling improved substantially, while providers.py still has 76.09\% branch coverage.
+\end{quote}
+
+I also asked:
 \begin{quote}
 \small
 Also review existing provider and error-handling assertions. Strengthen any that could pass despite incorrect results or state, and explain concrete examples.
@@ -144,6 +163,18 @@ Also review existing provider and error-handling assertions. Strengthen any that
 Codex added ten methods. These checked whether search results expired after ten minutes, whether different searches reused the correct results, and whether requests waited for the required interval. A controlled clock allowed these timing tests to run without real waiting. Other tests checked downloads, bad service responses, and missing model settings.
 
 Four existing methods also gained better checks. A timeout test now saved a paper first and verified that it survived. A download failure had to leave the record and files unchanged. A retry test checked the exact saved answer and whether it was reused. A redirect test checked the request destination.
+
+For example, the last check in the earlier retry test only counted saved answers:
+\begin{reportcode}
+self.assertEqual(len(self.detail(paper['id'])['analyses']), 1)
+\end{reportcode}
+The improved test added these checks:
+\begin{reportcode}
+analysis = succeeded.json['analysis']
+self.assertEqual(analysis['answer'], answer)
+self.assertEqual(analysis['kind'], 'summary')
+\end{reportcode}
+Here, \texttt{answer} is the known sample model response. The earlier count could pass if the saved text was wrong. The added checks require the correct text and task. These are selected lines from the recorded test change in \texttt{test\_validation.py}.~[4]
 
 The final suite passed 52 of 55 methods. All ten new methods and the four improved methods passed. No new bug was found. The same three application bugs still caused the same four failure events. The external-service module reached 98.46\% line coverage and 95.65\% branch coverage.~[4]
 
@@ -165,7 +196,14 @@ Round 2 & 52 / 55 & 98.47\% & 91.95\% & 3 \\
 \end{tabular}
 \end{center}
 
-The final suite covered 514/522 lines and 160/174 branch outcomes. All stages had zero test errors and zero skipped tests. The following table shows line coverage / branch coverage for each file.
+The final suite covered 514/522 lines and 160/174 branch outcomes. All stages had zero test errors and zero skipped tests. The saved final output ends with:
+\begin{reportcode}
+Ran 55 tests in 13.357s
+
+FAILED (failures=4)
+\end{reportcode}
+
+The following table shows line coverage / branch coverage for each file.
 
 \begin{center}
 \small
@@ -187,6 +225,8 @@ File & Initial & Round 1 & Round 2 \\
 The first round improved PDF coverage and found a new bug. The second round improved service handling and checked saved data more carefully, but found no additional bug. Some stronger checks did not increase coverage because the earlier tests already ran those lines.
 
 The final review found no incorrect expected results. Coverage shows how much code ran; it does not show that every result was checked correctly. For example, a saved answer can exist but contain the wrong text. Also, the higher final pass rate came from adding passing tests, not from fixing the app. The three known bugs were left in place for the comparison.
+
+Eight executable lines and fourteen branch outcomes were still not covered. The missed cases include deleting a paper while a model answer is being generated, rejecting unusually complex PDF data, and removing an old search result when the cache is full. These remain gaps even though the overall percentages are high.
 
 \reportsection{5. Reflection}
 
@@ -233,7 +273,7 @@ The quoted prompts, test results, and coverage reports are saved here:
 
 \textbf{[3]} \path{solutions/hw2/round1_stage/}: first feedback, review notes, and \path{evidence/round1-only/}.
 
-\textbf{[4]} \path{solutions/hw2/round2_stage/}: second feedback, review notes, \path{evidence/round2-only/}, and \path{evidence/comparison.json}.
+\textbf{[4]} \path{solutions/hw2/round2_stage/}: second feedback, review notes, \path{evidence/round2-only/}, \path{evidence/comparison.json}, and \path{evidence/retained-test-changes.diff}.
 \par}
 
 \end{document}
