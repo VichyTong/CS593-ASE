@@ -40,11 +40,10 @@
 {\normalsize Weixi Tong\hfill November 2, 2026\par}
 \vspace{12pt}
 
-I used each test run, together with Codex's review, to decide what to ask for next. The initial results pointed to missing PDF cases. After those cases were added, the remaining gaps pointed to service handling and weak checks of saved results. This report explains how those observations shaped the two improvement prompts and how I judged their results.
 
 \reportsection{1. Test Generation Approach}
 
-Papertrail, my Homework 1 application, lets users search arXiv, save papers, upload PDFs, generate summaries, and ask questions about a paper. It uses Flask, SQLite, and pypdf, with a JavaScript frontend. I began with a broad request to read the application and its requirements, then write tests for its main functions:
+My Homework 1 application lets users search arXiv, save papers, upload PDFs, generate summaries, and ask questions about a paper. It uses Flask, SQLite, and pypdf, with a JavaScript frontend. I began with a broad request to read the application and its requirements, then write tests for its main functions:
 \begin{quote}
 \small
 Generate meaningful, executable tests for the main functionality, including normal cases, edge cases, and error handling. Prefer the existing unittest framework unless there is a clear reason to change it.
@@ -84,16 +83,24 @@ FAILED (failures=3)
 Before deciding on the next prompt, I needed to understand the failures. Two methods failed on three input cases; none failed because of a setup error. Codex's review linked them to two application bugs.
 
 \textbf{Bug 1: invalid analysis input caused a server error.}
-An analysis request with \texttt{\{"kind": []\}} or \texttt{\{"kind": \{\}\}} returned HTTP 500 rather than an input error 400. The app checked the value in a set before checking its type. The detecting method in \texttt{test\_validation.py} was:
+An analysis request with \texttt{\{"kind": []\}} or \texttt{\{"kind": \{\}\}} returned HTTP 500 rather than an input error 400. The app checked the value in a set before checking its type.
+
+\begin{minipage}{\linewidth}
+The detecting method in \texttt{test\_validation.py} was:
 \begin{reportcode}
 test_invalid_analysis_payloads_are_client_errors_without_provider_calls
 \end{reportcode}
+\end{minipage}
 
 \textbf{Bug 2: an unusual page number caused a server error.}
-The search value \texttt{page=\%C2\%B2} contains the superscript character \textsuperscript{2}. It passed \texttt{isdigit()}, but \texttt{int()} could not convert it. The app again returned 500 rather than 400. The detecting method was:
+The search value \texttt{page=\%C2\%B2} contains the superscript character \textsuperscript{2}. It passed \texttt{isdigit()}, but \texttt{int()} could not convert it. The app again returned 500 rather than 400.
+
+\begin{minipage}{\linewidth}
+The detecting method was:
 \begin{reportcode}
 test_invalid_search_parameters_are_client_errors
 \end{reportcode}
+\end{minipage}
 
 The expected 400 responses followed how the app handled other invalid inputs. I therefore kept the expectations and recorded the failures as application problems. Bug 1 has two failing inputs, which explains the three failure events. These results showed that the initial suite could already detect bugs, but they did not tell me which important behavior it had missed.~[2]
 
@@ -117,8 +124,6 @@ The reason for this instruction was that an error response alone would not show 
 
 Codex retained the initial 37 methods and added eight. It tested the app's 20 MiB limit and one byte above it, 0/1/150/151-page PDFs, and text just below, at, and above one million characters. It also checked that a failed AI metadata request still allowed the app to save the PDF with its locally extracted information.
 
-The README did not define the unit in \texttt{20 MB} more precisely, so these boundary tests used the app's current 20 MiB setting. This was a stated assumption in the round 1 notes.
-
 The run passed 42 of 45 methods. All 35 previously passing methods still passed. Coverage rose to 96.74\% for lines and 86.78\% for branches, with the PDF module reaching 98.20\% and 88.46\%. However, one new method failed, so the pass rate had fallen. I needed to inspect that result before treating the round as successful or unsuccessful.~[3]
 
 \begin{minipage}{\linewidth}
@@ -132,12 +137,14 @@ Actual:   ['Research Libraries', 'Dana Tester', 'Evan Researcher']
 \end{reportcode}
 \end{minipage}
 
+\begin{minipage}{\linewidth}
 The detecting method in \texttt{test\_pdf\_round1.py} was:
 \begin{reportcode}
 test_multiline_prominent_title_is_not_misidentified_as_an_author
 \end{reportcode}
+\end{minipage}
 
-The sample's heading and author line had clear roles, and the wrong author appeared in both the response and the database. That supported treating it as an application mistake. The new failure also explained the lower pass rate: the added test had exposed a problem that the earlier samples could not reveal. I kept the check and counted the round as an improvement in bug detection. It did not establish that all PDF layouts would be handled correctly.
+The sample's heading and author line had clear roles, and the wrong author appeared in both the response and the database. That supported treating it as an application mistake. The new failure also explained the lower pass rate: the added test had exposed a problem that the earlier samples could not reveal. I kept the check and counted the round as an improvement in bug detection.
 
 \reportsubsection{Round 2: follow the remaining gaps and inspect the checks}
 
@@ -168,7 +175,7 @@ self.assertEqual(analysis['kind'], 'summary')
 \end{reportcode}
 Here, \texttt{answer} is the known sample response. These checks require the expected text and task. Codex also found that the timeout test started with an empty library, so it changed the setup to save a paper first and verify that it survived. This is how the request to review existing checks led to concrete changes, even where code was already covered.~[4]
 
-The result was 52 passes out of 55 methods. All ten additions and four strengthened methods passed, while the same three application bugs still produced four failure events. Service-code coverage reached 98.46\% for lines and 95.65\% for branches. I interpreted this as evidence of better coverage and more specific checks. The observed bug count stayed at three, so this round did not demonstrate another increase in bugs found.
+The result was 52 passes out of 55 methods. All ten additions and four strengthened methods passed, while the same three application bugs still produced four failure events. Service-code coverage reached 98.46\% for lines and 95.65\% for branches. I interpreted this as evidence of better coverage and more specific checks.
 
 \clearpage
 \reportsection{4. Final Evaluation}
@@ -213,9 +220,9 @@ File & Initial & Round 1 & Round 2 \\
 \end{tabular}
 \end{center}
 
-Coverage alone does not capture the whole improvement. Checking the saved answer more carefully can improve a test even when it executes the same lines. Conversely, a higher pass count does not mean the app was repaired: all previously passing methods continued to pass, more methods were added, and the known bugs remained.
+Reviewing the checks added a second kind of improvement. In round 2, the retry test began checking the returned and saved answer, and the timeout test began checking an existing paper after a failed request. A pass now confirms the expected answer content or the preservation of saved data. These changes addressed weaknesses in what the earlier tests checked, even when they already executed the relevant code.
 
-The final review found no incorrect expected results, but eight lines and fourteen branch outcomes were still uncovered. They include deleting a paper while a model answer is being generated, rejecting unusually complex PDF data, and removing an old search result when the cache is full. I kept these as limits of the result rather than treating the high coverage as proof that the application was fully tested.
+The final review found no incorrect expected results. Eight executable lines and fourteen branch outcomes remained uncovered. I would use these gaps to guide another round, starting with deleting a paper during answer generation, rejecting unusually complex PDF data, and removing an old search result when the cache is full.
 
 \reportsection{5. Reflection}
 
@@ -223,9 +230,7 @@ I learned to use pass/fail counts as a starting point for review. The new PDF fa
 
 Codex was effective at turning focused feedback into executable tests. Its first version was less effective at choosing difficult PDF samples and checking saved content. I would make sample data and expected results clearer in the first request, then continue using actual results to choose the next step. The useful input to the agent was our explanation of a weakness and the behavior we wanted the test to verify.
 
-The use of fixed responses and a controlled clock reduced dependence on real services and timing. We did not run enough repetitions to measure how often a test might fail only sometimes. The experiment also did not test browser interaction, actual model answer quality, complicated PDF layouts, simultaneous requests, or crashes. Those limits follow from the kinds of tests used.
-
-Codex helped review the outputs and prepare the prompts, tests, and report. I used that analysis to direct the two improvement rounds. I did not manually edit the tests or fix the application during this comparison.
+Fixed service responses and a controlled clock let me choose the exact conditions each test exercised. For a further round, I would start with the case where a paper is deleted during answer generation, repeat the suite to check for inconsistent results, and add a browser test of the search, save, and analysis workflow.
 
 \reportsection{6. GitHub Repository}
 
