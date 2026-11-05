@@ -1,0 +1,33 @@
+Papertrail initial test experiment setup
+
+This directory is a separate initial-stage experiment for the current English
+request. Existing solutions/hw2/tests and solutions/hw2/evidence predate this
+request; their initial and round1 results are not results of this stage.
+
+Pre-run observations
+- Homework 1 uses unittest and has 14 existing test methods in tests/test_app.py.
+- The existing hw1 virtual environment is usable: Python 3.11.4, Flask 3.1.3,
+  pypdf 6.19.0, requests 2.34.2, python-dotenv 1.2.4, gunicorn 26.2.0,
+  coverage 7.17.0. These match the local requirements files.
+- No dependencies were installed or upgraded for this stage.
+- No application code or pre-existing tests were edited.
+
+Test harness setup supplied before first execution
+- Add the Homework 1 application and new test directory to Python's import path.
+  This supports the app's existing flat imports without changing its source.
+- Disable dotenv loading before importing app.py, clear inherited configuration,
+  and provide numeric test settings and dummy credentials explicitly.
+- Use a TemporaryDirectory for every new test's SQLite database and PDF files.
+  Legacy tests also supply their own temporary DATA_DIR. A runner-level temporary
+  DATA_DIR protects any accidental default app-factory call as well.
+- Block requests.Session.request and socket connections in the runner; mock
+  requests.get/post or named service boundaries within individual tests.
+- Reset arXiv's process cache and throttle state in new tests and mock sleeping.
+- Disable Python bytecode writes, and capture application errors separately from
+  unittest output. Genuine expected provider responses use synthetic fixtures.
+- Generate small text, scanned/blank, and encrypted PDF fixtures in memory using
+  the already installed pypdf package. No personal PDFs or library records are read.
+
+These are harness configuration steps, not application repairs. No failed
+dependency installation or import attempt is claimed. Any execution-time setup
+problem will be recorded with its actual first-run evidence.

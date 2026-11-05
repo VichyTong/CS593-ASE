@@ -1,0 +1,8 @@
+Name                                                                                                 Stmts   Miss Branch BrPart  Cover   Missing
+------------------------------------------------------------------------------------------------------------------------------------------------
+/private/var/folders/gx/2xg3r_d176d1zh_442btlgmc0000gr/T/papertrail-baseline-6rigpa6t/app.py           247     55     74     26    72%   25, 29, 31, 33, 36, 54->56, 57, 94-103, 110-112, 116, 137-138, 146, 155, 157, 173, 176, 185, 191, 196-203, 205-209, 237, 242, 246-249, 255, 258, 272, 286, 288, 292, 304
+/private/var/folders/gx/2xg3r_d176d1zh_442btlgmc0000gr/T/papertrail-baseline-6rigpa6t/database.py       34      3      2      0    92%   15-17
+/private/var/folders/gx/2xg3r_d176d1zh_442btlgmc0000gr/T/papertrail-baseline-6rigpa6t/pdf_tools.py     111     48     52     13    52%   18, 22, 24, 29, 33, 36, 41-52, 54-57, 65-67, 71-79, 87->90, 101, 107-122, 132->130
+/private/var/folders/gx/2xg3r_d176d1zh_442btlgmc0000gr/T/papertrail-baseline-6rigpa6t/providers.py     130    101     46      0    16%   20-77, 81-102, 121-150, 153-164
+------------------------------------------------------------------------------------------------------------------------------------------------
+TOTAL                                                                                                  522    207    174     39    54%

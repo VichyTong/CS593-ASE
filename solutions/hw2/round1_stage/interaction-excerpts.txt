@@ -1,0 +1,23 @@
+Selected genuine English interaction excerpts from round 1
+
+These are selected message contents from the current chat, not a complete
+transcript, invented conversation, or screenshot evidence. Individual chat
+timestamps are not assigned here. The complete user feedback is preserved in
+feedback-request.txt, with paragraph wrapping normalized. Actual run timestamps,
+arguments, and outcomes are in evidence/round1-only/results.json.
+
+Assistant, opening:
+
+I’ll create a separate round 1 directory, retain the initial HW2 tests unchanged, and add focused PDF and metadata tests. I’ll preserve the initial evidence, use the same coverage scope, and stop after evaluating this round without changing application code.
+
+Assistant, while designing the oracles:
+
+I’ll test the real upload and extraction paths at the size, page-count, and text limits, with no reduced thresholds or mocked extraction. For metadata, I’ll use PDFs with no document metadata and check their visible title, byline, and date evidence.
+
+The README leaves two details unclear: whether “20 MB” means decimal or binary megabytes, and which date should win when several publication dates are plausible. I’ll document those ambiguities and test the configured 20 MiB boundary.
+
+Assistant, after the execution:
+
+The round 1 run finished: 42 of 45 methods passed. The three original failing subcases remain, and one new metadata test failed: the title continuation “Research Libraries” was persisted as an author alongside the two actual authors.
+
+The limit and AI enrichment-failure tests passed. Overall line coverage rose to 96.74% and branch coverage to 86.78%. I’ll document the new defect and the unchanged metrics, then finish the comparison and integrity checks.

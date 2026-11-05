@@ -1,0 +1,66 @@
+{
+  "frozen_at": "2026-11-02T19:46:28.526802-06:00",
+  "stage": "new initial generation only; frozen before first test execution",
+  "coverage_application_scope": [
+    "solutions/hw1/app.py",
+    "solutions/hw1/database.py",
+    "solutions/hw1/pdf_tools.py",
+    "solutions/hw1/providers.py"
+  ],
+  "frozen_inputs": {
+    "solutions/hw1/README.md": "9eb3dfaef27618cb32d199e26fa22f538f41de7d9d1bce01e0c44aa2f4ea127c",
+    "solutions/hw1/app.py": "a948cc1006a7cd1ca75068f606fe206812cf26c0d220d2c64479ed28f97a873b",
+    "solutions/hw1/database.py": "3e153005810e995971dfa6c8392353a67c6c8295f8df48f3a397de12678678e3",
+    "solutions/hw1/pdf_tools.py": "e9635f2032566c0c01587308b33d13dc9a12a01c741f39aea2a5ea83fce205ff",
+    "solutions/hw1/providers.py": "ba5fe1427719500a87dd43cc974ffb42e2b9768d64d5a96660f63aa4e557dd38",
+    "solutions/hw1/requirements.txt": "b3db19aae9d1051397fb95d81e83757025405c0ae7d56565875a0bb7d1b88aae",
+    "solutions/hw1/static/app.js": "d80fcce74f130279f9b513b6e7bf6418810d1b62230dbed1fa479496a8851621",
+    "solutions/hw1/static/favicon.svg": "a5c9e0b2bef1279a9fd4db6c26fc5fd11d30e66cf3e46ac544f6b09b73adf364",
+    "solutions/hw1/static/style.css": "97eb4fffd68900d2136f4283fcae4b801708e6ba0109a661a04fcd30b53494b1",
+    "solutions/hw1/templates/index.html": "77db1563c9d335a272d9e4c6a2d5c74c6747231a2ac31c992a83634ab3e3498a",
+    "solutions/hw1/tests/test_app.py": "bbccebb8c6c116db5ee030e7788920060c34bfa8c2ac9f31f211b4c4bc999ace",
+    "solutions/hw2/initial_stage/generation-request.txt": "850a12477a72a997a77bf95d196dd4e5f0f7232e955291b42a95b587b0877eef",
+    "solutions/hw2/initial_stage/requirements-test.txt": "ed3bdbb0c70e6fca8eed959a20c8464b3d316227157d8b02fee041b777d68b44",
+    "solutions/hw2/initial_stage/run_initial.py": "ab378b595e22e6de061d415b17687be879a7195b4998a614572130b48a312038",
+    "solutions/hw2/initial_stage/setup-notes.txt": "694a40407d41c3d970eef92b51c302da4118d8f49c1b6e05eaee5eb04fc6c121",
+    "solutions/hw2/initial_stage/tests/initial_support.py": "81ba875012ec9f6ae2f8f9bb9a2d2fd7e4787ebb2fbc6c329de86d529bc3436f",
+    "solutions/hw2/initial_stage/tests/test_components.py": "42ced84894d7619e13c0b51c0e0dd1fdfe6659ca0a9413f090e0cd0d81b8dbcb",
+    "solutions/hw2/initial_stage/tests/test_validation.py": "437369ded856ea61fc9e92f8fe114eb0b2b0536da0d3838f1df4287293ee2e56",
+    "solutions/hw2/initial_stage/tests/test_workflows.py": "6e5913eaab4bd13ef3708a5cb94f9d82a9f7a70043cccbc983d8cec4a174d0b3"
+  },
+  "test_method_counts_before_execution": {
+    "solutions/hw1/tests/test_app.py": 14,
+    "solutions/hw2/initial_stage/tests/test_components.py": 8,
+    "solutions/hw2/initial_stage/tests/test_validation.py": 14,
+    "solutions/hw2/initial_stage/tests/test_workflows.py": 15
+  },
+  "pre_existing_hw2_artifacts_untouched_and_excluded": {
+    "solutions/hw2/requirements-test.txt": "28d059effce14aadab7a67f5bb45a87cf587276c00e5086ab656f964555a82d4",
+    "solutions/hw2/.gitignore": "c014a96b073880c5ac449ac3f9ad962f5a52328cab2d80eafae1dd5b9b19f701",
+    "solutions/hw2/run_experiment.py": "28ef1117911496c92e9c55399e97e9e3a6a4b21824c6d96a82c5680d30dda5d2",
+    "solutions/hw2/evidence/baseline-manifest.json": "03ec5ff06fb3c9d628cfbf94b0b5580e261af0380544c3a4d98212fac40969ef",
+    "solutions/hw2/evidence/iteration-log.md": "d42149933affb42f83796f6faf831e8fb2817fc575f3bdb29bbaf382032bc19e",
+    "solutions/hw2/evidence/baseline-source.zip": "921b3489a224c9b19a4ee94ab6f83f2885fb73ca66d1d4e5b019485e44a873a1",
+    "solutions/hw2/evidence/initial/server-errors.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "solutions/hw2/evidence/initial/.coverage": "8e830dcaa0fb4fcd5bfad80e8509b160848d1640f78a70b02698174d9ef0204c",
+    "solutions/hw2/evidence/initial/results.json": "ae9756cf15c2ede8fc7b54e1bad32c3ccadd443aa1a6b6503cf611e8ed5feb57",
+    "solutions/hw2/evidence/initial/coverage.txt": "17fa2b60b4bbb43863e2996a89d5deb8a9f371b8f3bc0d46f6eab754af017aa5",
+    "solutions/hw2/evidence/initial/coverage.json": "1db56fd9e0293e8dc4f81de5b1535ee49bfa765806cdaf1ec8f6d93553a9b195",
+    "solutions/hw2/evidence/initial/test-output.txt": "103cafbb93639fd11d5c81d54f7d3aaf016b99dee0db2ceb4304ecef029139ee",
+    "solutions/hw2/evidence/round1/server-errors.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "solutions/hw2/evidence/round1/.coverage": "6e13046228e6fa4fc71283a3e1b4c14d857ad3eea1eedc4ac6b1ace1973b390c",
+    "solutions/hw2/evidence/round1/results.json": "6edef417854130a61d79accfcc57eaf12b5fc400f4f89c112f69ca4bbffa6961",
+    "solutions/hw2/evidence/round1/coverage.txt": "ed0861902682fe4415f8d5a31bc6c24b1d58e55165f5171c928bca9c07367252",
+    "solutions/hw2/evidence/round1/coverage.json": "5b2951d4b3f5a083337ffe07bbdd31de37a7784e29d1ae208974af3317219ac9",
+    "solutions/hw2/evidence/round1/test-output.txt": "3044a305af458c6f5f45679bb290896c5b6ba895d3bf59e11f67eb235836a519",
+    "solutions/hw2/tests/support.py": "a617da2c4f1b094f99e49be2ccbf0c31c63fbb897ddcaa510b768076eba3efb4",
+    "solutions/hw2/tests/test_round1.py": "5900bd523d6d41c9a574f58939d289b761cc56aee289c46efb465eb590c293b2",
+    "solutions/hw2/tests/test_initial.py": "c562e101333bd770e65a1acc3543db45c29c4e760ae637da3e5a18701bbd53e0"
+  },
+  "excluded_private_paths": [
+    "solutions/hw1/.env",
+    "solutions/hw1/data",
+    "solutions/hw1/tmp",
+    "solutions/hw1/.venv"
+  ]
+}

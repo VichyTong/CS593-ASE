@@ -1,0 +1,29 @@
+Actual user feedback for improvement round 1
+Message content copied from this chat; paragraph wrapping is normalized.
+
+Please proceed with improvement round 1 only.
+
+Based on your initial evaluation, I want to provide more explicit requirements and focus this round on PDF handling, where the initial suite has substantial coverage gaps.
+
+Please improve the tests for these behaviors:
+
+1. PDF limits: cover boundary and rejection behavior for the documented upload-size, page-count, and extracted-text limits. Use practical synthetic fixtures. For rejected uploads, verify that no paper record or orphaned PDF file is created.
+2. Metadata extraction: add synthetic PDFs without explicit document metadata, so fallback extraction is actually exercised. Include clear title, author, and publication-year evidence where appropriate. Explain how the expected values follow from the fixture and intended behavior. Flag ambiguous requirements rather than treating the current implementation as the specification.
+3. Metadata enrichment failure: verify the documented fallback behavior when optional AI metadata enrichment fails, including what is persisted and returned to the user.
+
+Use meaningful assertions about extracted content, metadata, stored state, and relevant provider calls. Avoid redundant cases and avoid mocking the behavior being tested.
+
+Preserve the entire initial_stage directory and its original evidence. Create a separately runnable round 1 version in a new directory. Retain the initial HW2 tests unless a correction is justified and documented. Keep application code unchanged, and retain the tests exposing the two known validation bugs without weakening, skipping, or marking them as expected failures.
+
+Run the round 1 suite with temporary storage and mocked external services. Measure the same four application modules with the same coverage settings. Compare the initial HW2-only suite against the round 1 HW2-only suite; exclude the 14 legacy Homework 1 tests and older experiments from this primary comparison.
+
+Report:
+
+- Test-method counts, passed/failed methods, and failing subcases.
+- Overall and per-module line and branch coverage.
+- Tests added or corrected, why they were needed, and what they verify.
+- Any newly detected bugs and any remaining weaknesses.
+
+Preserve the actual execution and coverage output, and record this feedback in the English experiment notes. Explain the observed results even if some metrics do not improve.
+
+Stop after evaluating round 1. Do not begin round 2 or write the final report.

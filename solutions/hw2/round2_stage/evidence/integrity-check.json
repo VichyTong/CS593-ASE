@@ -1,0 +1,40 @@
+{
+  "verified_at": "2026-11-02T22:17:08.090035-06:00",
+  "prior_stage_inventories": {
+    "initial_stage": {
+      "file_count": 76,
+      "inventory_and_hashes_unchanged": true
+    },
+    "round1_stage": {
+      "file_count": 48,
+      "inventory_and_hashes_unchanged": true
+    }
+  },
+  "all_protected_prior_file_count": 145,
+  "all_protected_prior_files_unchanged": true,
+  "frozen_round2_input_count": 26,
+  "frozen_round2_inputs_unchanged_after_execution": true,
+  "frozen_zip_valid_and_matches_manifest": true,
+  "known_defect_methods_source_identical_and_without_decorators": true,
+  "retained_round1_methods": 45,
+  "new_methods": 10,
+  "strengthened_method_count": 4,
+  "expectation_corrections": [],
+  "prior_measurement_reference_copies_match_originals": true,
+  "previously_covered_lines_and_branches_retained": true,
+  "all_42_previously_passing_methods_still_pass": true,
+  "same_four_failure_event_identities_as_round1": true,
+  "all_ten_new_methods_pass": true,
+  "same_application_hashes_and_coverage_settings": true,
+  "denominator": {
+    "statements": 522,
+    "branch_destinations": 174
+  },
+  "included_legacy_hw1_methods": 0,
+  "network_attempts": 0,
+  "git_diff_hw1_empty": true,
+  "git_diff_hw1_exit_code": 0,
+  "round2_application_suite_executions": 1,
+  "additional_test_executions_during_integrity_check": 0,
+  "observed_round2_process_exit_code": 1
+}

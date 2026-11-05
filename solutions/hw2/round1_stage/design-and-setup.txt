@@ -1,0 +1,108 @@
+Round 1 PDF test design and setup before execution
+
+The user's complete feedback is in feedback-request.txt. The requested strategy
+is explicit requirements and PDF-focused evidence, not general test expansion.
+This directory retains byte-identical copies of all three initial HW2 test
+modules and their helper. No initial assertion has been corrected, weakened,
+skipped, or marked expectedFailure. Eight new methods are planned: four limit
+methods, three metadata methods, and one parameterized enrichment-failure method.
+The suite therefore contains 45 HW2 methods, excluding all 14 HW1 legacy methods
+and all older experiments. The initial_stage directory is protected in full.
+
+Requirement sources and explicit ambiguities
+
+The application README documents 20 MB, 150 pages, and one million extracted
+characters, best-effort PDF metadata/text extraction, prominent titles,
+publication-context years, optional AI enrichment, editable unknown fields,
+and actionable errors. The user's round 1 feedback explicitly requires no
+paper records or orphaned PDFs after rejected uploads, meaningful metadata
+oracles, and checking persisted and returned fallback behavior after enrichment
+failure. These guide the tests, rather than using the observed implementation
+output as the expected value.
+
+The README writes '20 MB' without specifying decimal vs binary units; the
+current configured file limit is 20 MiB (20,971,520 bytes). The byte-boundary
+test explicitly checks that configured convention, not an independently proven
+choice of documentation units. Whether the product should use 20,000,000 bytes
+remains ambiguous. 'Limited to' suggests an inclusive maximum; the current
+error wording 'smaller than' is less precise. The exact-boundary case records
+the inclusive convention, without asserting that the documentation settles it.
+
+Which date wins among multiple plausible publication/preprint/conference dates
+is unspecified. These tests supply exactly one labeled publication date and a
+clearly labeled dataset date; they do not encode a policy for conflicting valid
+publication dates. General extraction accuracy is described as best effort, so
+the metadata cases use simple known layouts and record any accuracy failure as
+a concrete synthetic-fixture result, not proof that arbitrary PDFs must work.
+
+The source uses a 200-character readability threshold and a 15,000,000-byte
+decoded-page complexity threshold, neither numerically documented in the README.
+This round does not elevate those implementation values into requirements.
+Character counting with Unicode normalization or embedded NULs is also not
+specified. ASCII fixtures avoid that ambiguity for the million-character limit.
+
+PDF fixture design and expected values
+
+1. File size: a normal readable PDF is padded by a legal comment immediately
+   before startxref. All existing object/xref byte positions remain valid. The
+   file is tested at 20 MiB and one byte over. This exercises the actual file
+   limit without huge decoded text or changed thresholds. A separate request
+   exceeds Flask's actual 21 MiB transport cap to check its HTTP 413 path.
+   All fixtures are generated in memory; roughly 20-21 MiB is practical here.
+2. Page counts: real PDFs with 1 and 150 uniquely labeled readable pages should
+   upload with all page text and sequential page numbers retained. Zero-page
+   and 151-page PDFs should be rejected with no records or stored files.
+3. Text: two pages contain known ASCII strings, totaling 999,999, 1,000,000, or
+   1,000,001 characters. A single Tj operation per page adds no newline. The
+   first two totals should persist with exact text lengths and hashes; the
+   over-limit case should leave no storage. Two pages test the aggregate limit.
+   Explicit document metadata keeps metadata heuristics out of these cases.
+4. Metadata: the entire PDF Info dictionary is removed, including Producer.
+   The visible 24 pt title is 'Reliable Storage for Research Libraries', and
+   the 12 pt byline is 'Dana Tester and Evan Researcher'. The 10 pt affiliation
+   is not a person. 'Published in the Synthetic Systems Conference 2024' gives
+   the publication year. The body explicitly says the dataset was collected in
+   2018. Thus expected title, two authors, and year 2024 follow from known roles
+   in the fixture, rather than the current heuristic's output. The abstract is
+   a known paragraph between Abstract and 1 Introduction.
+5. A two-line title uses the same two 24 pt heading lines, with the byline in
+   12 pt below. The expected title is the joined heading. 'Research Libraries'
+   is a title continuation, not an author. This is a distinct typography and
+   role-boundary case, not just a second copy of the simple title test.
+6. An unknown-fields PDF retains its title, abstract, and dataset year but
+   omits byline and publication evidence. Expected authors=[] and year=null
+   follow the documented promise not to invent missing bibliographic fields.
+7. AI failure cases use the simple no-Info PDF with a dummy configured model.
+   Mock only the HTTP boundary: timeout, invalid JSON, JSON non-object, and a
+   metadata object with invalid authors. The real LLM client, metadata parser,
+   metadata validation, PDF extractor, upload handler, and SQLite code run.
+   Expected fallback title/authors/year/abstract/text/bytes must persist, with
+   a review notice and no partial AI field replacement or saved analysis.
+   Reopening the app must retain the same paper; a duplicate upload must not
+   retry the unavailable enrichment service. No arXiv call should occur for
+   fixtures without an identifier.
+
+For every rejected upload, assertions check the library response, SQLite papers
+and analyses tables, and all uploads-directory entries. Each table row gets
+fresh temporary storage so a failed row cannot contaminate a later one. Accepted
+uploads check exact PDF byte hashes, page ordering/content, API/SQLite agreement,
+and provider-call expectations. No extraction function, metadata heuristic,
+limit constant, or application configuration threshold is mocked or reduced.
+
+Setup evidence
+
+The existing Python environment already has the same package versions as the
+initial stage. No package installation or application change was needed.
+Fixture-only probes (evidence/fixture-probe.txt) checked no-Info construction,
+line breaks, legal padding, and single-Tj lengths using pypdf directly. These
+probes did not import the application or execute application tests. Local
+inspection of PdfWriter's metadata setter established the supported way to
+remove the Info dictionary; no online documentation lookup was required.
+
+The independent round 1 runner retains the exact four-module coverage include
+list, branch=True, config_file=False, no omit list, and tracing before app
+import. It disables dotenv, clears inherited credentials/configuration, uses
+temporary storage and dummy credentials, and blocks real HTTP/socket access.
+The marker name used by the HTTP guard remains compatible with the unchanged
+initial helper. It refuses to write outputs inside the preserved initial_stage.
+All code and these pre-run notes are frozen before the first application run.

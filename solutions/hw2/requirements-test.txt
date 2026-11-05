@@ -1,0 +1,2 @@
+-r ../hw1/requirements.txt
+coverage==7.17.0

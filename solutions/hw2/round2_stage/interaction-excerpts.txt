@@ -1,0 +1,23 @@
+Selected genuine English interaction excerpts from round 2
+
+These are selected message contents from the current chat, not a full transcript,
+invented conversation, or screenshot evidence. Individual chat timestamps are
+not assigned here. The complete user feedback is in feedback-request.txt, with
+paragraph wrapping normalized. Actual run timestamps/arguments/outcomes are in
+evidence/round2-only/results.json.
+
+Assistant, opening:
+
+I’ll read the actual round 1 results, then create a separate round 2 suite focused on provider behavior and stronger error-state checks. I’ll preserve both earlier stages and all known-defect tests, keep application code unchanged, and stop after the round 2 evaluation.
+
+Assistant, after reviewing coverage and assertions:
+
+The round 1 data confirms gaps in throttle waiting, redirect follow-up and exhaustion, streamed size rejection, malformed feed entries, and the direct unconfigured-client error. I’ll test those through the real provider code with controlled time and mocked HTTP.
+
+I also found two weak assertions to strengthen: the timeout test starts with an empty library, so it could miss accidental deletion; the quota-retry test checks history length without verifying the saved answer. I’ll leave all known-defect assertions unchanged.
+
+Assistant, after execution:
+
+The run finished: 52 of 55 methods passed. All 10 new methods and the four strengthened methods passed; the same three known application defects produced the same four failure events. No new defect or setup failure was detected.
+
+Provider branch coverage rose from 76.09% to 95.65%; overall line and branch coverage reached 98.47% and 91.95%. I’m now checking the three-stage comparison and packaging the evidence.

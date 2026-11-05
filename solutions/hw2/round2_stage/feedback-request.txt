@@ -1,0 +1,41 @@
+Actual user feedback for improvement round 2
+Message content copied from this chat; paragraph wrapping is normalized.
+
+Please proceed with improvement round 2 only. This round should use execution feedback and coverage analysis to guide improvements.
+
+Round 1 contains 45 HW2 test methods: 42 passed and 3 failed, with 4 failure events exposing 3 application defects. Overall line coverage is 96.74% and branch coverage is 86.78%. PDF handling improved substantially, while providers.py still has 76.09% branch coverage.
+
+Read the actual round 1 coverage data and evaluation notes:
+
+- solutions/hw2/round1_stage/evidence/round1-only/coverage.json
+- solutions/hw2/round1_stage/experiment-notes.txt
+
+Use these results to prioritize meaningful remaining gaps, especially:
+
+1. Search caching and throttling:
+   Test cache reuse before expiry and refresh at or after the documented ten-minute expiry. Verify that different queries, pages, or sort options do not incorrectly reuse results. Exercise the minimum request interval using a controlled monotonic clock and mocked sleep, without real waiting. Assert returned results, provider-call counts, and relevant request parameters.
+
+2. PDF download behavior:
+   Exercise permitted redirects, redirect-limit exhaustion, streamed-download size boundaries, and interrupted downloads. Run the real provider logic with mocked HTTP responses. Verify request destinations, redirect handling, returned bytes, and meaningful error behavior. For failures exercised through the application API, check that partial content or misleading successful state is not persisted.
+
+3. Additional uncovered error paths:
+   Select useful remaining cases, such as malformed or error-bearing arXiv feeds and an unconfigured LLM client. Justify expected behavior from documented requirements or a clearly explained contract. Do not add tests solely to execute uncovered lines.
+
+Also review existing provider and error-handling assertions. Strengthen any that could pass despite incorrect results or state, and explain concrete examples. Avoid redundant cases, assertions that merely repeat implementation details, and mocking the behavior under test.
+
+Preserve initial_stage and round1_stage unchanged. Create a separately runnable round2_stage directory, retaining the round 1 regression cases and documenting any justified test corrections. Keep application code unchanged. Preserve the tests exposing all three known defects without weakening, skipping, or marking them as expected failures.
+
+Use temporary storage, dummy credentials, mocked external services, and no live or paid requests.
+
+Measure the same four application modules with the same coverage settings and denominator: 522 statements and 174 branch destinations. Keep the primary comparison HW2-only, excluding legacy HW1 tests and older experiments.
+
+After execution:
+
+- Compare initial, round 1, and round 2 results, including test-method outcomes, failure events, and overall and per-module line and branch coverage.
+- Explain how each meaningful addition or assertion improvement addresses a measured gap.
+- Distinguish application bugs, incorrect tests, and setup problems.
+- Report any newly detected defects honestly; finding none is acceptable.
+- Discuss remaining limitations and whether this feedback strategy improved test quality beyond increasing coverage.
+- Preserve the actual test output, coverage evidence, and this English feedback.
+
+Do not target 100% coverage at the expense of meaningful tests. Stop after the round 2 evaluation and evidence preservation. Do not repair application code or write the final report yet.

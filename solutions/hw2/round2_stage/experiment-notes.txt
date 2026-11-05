@@ -1,0 +1,298 @@
+Papertrail round 2 experiment notes
+
+This is the requested round 2 evaluation record, not the final homework report.
+Round 2 is complete; no application repair or subsequent improvement work follows.
+
+Actual feedback and strategy
+
+feedback-request.txt preserves the user's complete English message, with
+paragraph wrapping normalized. The user explicitly asked for execution- and
+coverage-guided provider tests, meaningful assertions, retention of all regressions,
+unchanged earlier stages/application code, and a HW2-only three-stage comparison.
+
+The actual round 1 coverage JSON and evaluation notes were read before authoring
+tests. evidence/coverage-review-input.json records their paths/hashes and the
+specific missing provider lines/branches. design-and-setup.txt, frozen before
+execution, explains the requirements, inferred API contracts, and intended oracles.
+
+The provider gap was 11 missed statements and 11 missed branch destinations,
+including throttle waiting, invalid feeds, permitted redirect follow-up, exhausted
+redirects, streamed size rejection, and the direct unconfigured-client error.
+Cache expiry and separation of query/page/sort results also needed behavioral
+tests despite having no unique uncovered line. Four existing methods needed
+stronger assertions about destinations, existing records, and saved answers.
+
+All 45 round 1 method identities were retained. Four were strengthened in the
+round 2 copies only. Ten new methods bring the total to 55. The known-defect
+methods are source-identical. No expected outcome was corrected, weakened,
+skipped, or marked expectedFailure; no new test code changed after execution.
+
+Setup and actual execution
+
+The existing Python 3.11.4 environment and package versions were reused: Flask
+3.1.3, pypdf 6.19.0, requests 2.34.2, python-dotenv 1.2.4, gunicorn 26.2.0, and
+coverage 7.17.0. No dependency installation, setup fix, application edit, or
+execution-time test correction was needed. AST parsing checked syntax before
+freezing and did not execute application tests.
+
+Exactly one round 2 application-suite run was performed:
+  solutions/hw1/.venv/bin/python -B solutions/hw2/round2_stage/run_round2.py --output solutions/hw2/round2_stage/evidence/round2-only
+
+It started November 2, 2026, 22:07:59.940944 America/Chicago and finished at
+22:08:14.338798. Unittest reported 13.357 seconds for the 55 methods. The process
+exited 1 because of the three known application defects, not a harness error.
+The initial and round 1 suites were not rerun; their original evidence is reused.
+
+Dotenv loading was disabled, inherited keys/configuration cleared, dummy keys
+used, and SQLite/PDF storage temporary. Real HTTP and sockets were blocked;
+zero network attempts were recorded. Provider sleep was mocked and virtual time
+advanced without waiting. Personal library records/PDFs were not read or written.
+The inherited corrupt-PDF case again emitted 'EOF marker not found', as expected.
+
+Test outcomes across the same HW2-only scope
+
+Suite     Methods  Passed  Failed methods  Failure events  Failed subtests  Ordinary failures
+Initial      37       35         2              3                3                0
+Round 1      45       42         3              4                3                1
+Round 2      55       52         3              4                3                1
+
+Every suite has zero test errors and zero skips. All 42 previously passing
+round 1 methods still pass, including the four strengthened methods. All ten
+new methods pass. Round 2's failure event identities match round 1 exactly.
+There are still three observed defects, not four: two malformed kind subcases
+share one root cause, the superscript page case has another, and the metadata
+case is the third. No newly detected application defect was found in round 2.
+
+The method pass rate is 94.55% in round 2 versus 93.33% in round 1. That change
+comes from adding passing cases, not repairing the application. It is not a
+standalone measure of test correctness or fault detection.
+
+Same coverage denominator and settings
+
+All three measurements include only solutions/hw1/app.py, database.py,
+pdf_tools.py, and providers.py. Source hashes, Python/packages, and configuration
+match across all three runs. Coverage uses branch=True, config_file=False, the
+same four-file include list, no omit list, and tracing before app import.
+The denominator remains 522 executable statements and 174 branch destinations.
+Legacy HW1 tests and older experiments are excluded from every compared suite.
+Tests, frontend assets, templates, dependencies, and submission tooling are
+not targets. app.py's guarded server startup statement remains included.
+
+Overall metric            Initial             Round 1             Round 2
+Lines                    474/522 90.80%       505/522 96.74%       514/522 98.47%
+Branch destinations      135/174 77.59%       151/174 86.78%       160/174 91.95%
+
+Per-module line coverage
+File                     Initial             Round 1             Round 2
+app.py                   241/247 97.57%       243/247 98.38%       243/247 98.38%
+database.py                34/34 100.00%        34/34 100.00%        34/34 100.00%
+pdf_tools.py               83/111 74.77%       109/111 98.20%       109/111 98.20%
+providers.py              116/130 89.23%       119/130 91.54%       128/130 98.46%
+
+Per-module branch coverage
+File                     Initial             Round 1             Round 2
+app.py                     68/74 91.89%         68/74 91.89%         68/74 91.89%
+database.py                  2/2 100.00%          2/2 100.00%          2/2 100.00%
+pdf_tools.py                31/52 59.62%         46/52 88.46%         46/52 88.46%
+providers.py                34/46 73.91%         35/46 76.09%         44/46 95.65%
+
+Round 2 gains 9 statements and 9 branch destinations over round 1: 1.72 and
+5.17 percentage points overall. All measured coverage gains occur in providers.py:
+6.92 line-coverage points and 19.57 branch-coverage points. No previously covered
+line or branch is lost. Application, database, and PDF-module percentages stay
+unchanged. The new API state and stronger persistence assertions still add
+behavioral checks in already executed code, which coverage cannot distinguish.
+
+Relative to the initial generated-only suite, gains are 40 statements and 25
+branch destinations, or 7.66 and 14.37 percentage points. This comparison retains
+the same application scope and excludes legacy coverage throughout.
+
+The rounded text report's Cover value for round 2 is 97%; its combined metric
+is (514+160)/(522+174) = 96.84%. This differs from the 98.47% line-only metric.
+All exact counts, module deltas, missing paths, and failures are in comparison.json.
+
+Meaningful additions and relation to measured gaps
+
+All ten new methods are in tests/test_providers_round2.py:
+
+1. test_cache_reuses_before_expiry_and_refreshes_at_and_after_ten_minutes
+   Uses a mutable monotonic clock at 1000, 1599.99, 1600, 2199.99, and 2200.25.
+   Distinct editions prove which data is returned before, exactly at, and after
+   expiry. Verifies full bibliographic results, three actual mocked HTTP calls,
+   identical intended query parameters, and no throttle sleep for these gaps.
+   TTL correctness was missing behavioral evidence even though cache code lines
+   were already covered; simply hitting a cache branch would not catch stale data.
+2. test_cache_keys_separate_query_page_and_sort_results
+   Four distinct query/page/sort combinations have four gold results. Revisits
+   must reuse each own result without new HTTP. Verifies all fields, totals,
+   response page, start offsets, terms, and sort parameters. A cache keyed only
+   by topic or only by page could pass the old exact-repeat test but fail this.
+3. test_throttle_waits_only_for_the_missing_interval_without_real_sleep
+   Requests at virtual 1000 and 1001 cause exactly one 2.1-second mocked sleep,
+   sending the second request at 1003.1. A request at 1007 needs none. Checks
+   HTTP timestamps, results, and query parameters. Covers 25->26 and line 26
+   while establishing timing behavior, not merely observing sleep was called.
+4. test_permitted_relative_and_arxiv_redirects_return_exact_streamed_pdf
+   Follows a relative arXiv redirect and a trusted export.arxiv.org redirect.
+   Verifies all three destinations/options, no redirect-body iteration, exact
+   final bytes including around an empty chunk, and response closing. Addresses
+   line 92 / branch 90->92 and distinguishes safe following from silent refusal.
+5. test_streamed_download_accepts_size_limit_and_rejects_one_extra_byte
+   Real streaming loops accept exactly 20 MiB with correct length/hash and reject
+   20 MiB+1 with a meaningful limit error; HTTP response closing is checked in
+   both cases. Covers line 98 / branch 97->98. This is independent of the upload
+   size tests: streamed download is a separate ingress path with its own bound.
+6. test_failed_transfers_and_redirect_exhaustion_preserve_saved_paper_state
+   Four API subcases exercise interrupted streaming, oversized streaming,
+   repeated permitted redirects until exhaustion, and upstream HTTP 503.
+   Every failure returns error-only JSON, keeps the original raw database row
+   and complete API detail, leaves pages/PDF flags and analyses empty, and
+   creates no file. Requests must use only the expected destination/options
+   and responses must close. Exhaustion covers line 100 / branch 85->100.
+   The interruption yields a readable PDF before transfer failure: treating the
+   buffer as successful would create misleading state and fail the test. A clean
+   retry must fetch again and save exact fresh bytes and source text.
+7. test_malformed_and_error_feeds_are_not_cached_or_returned_as_success
+   Malformed XML and a valid entry followed by an arXiv error entry must fail,
+   retain an existing library paper and storage, then allow the same query to
+   recover and cache only its successful result. Full returned fields/saved_id,
+   requests, and call counts are checked. Covers lines 58-59 and branches 57->58
+   and 58->59; also checks failure-cache behavior in already covered paths.
+8. test_non_arxiv_entries_are_ignored_while_valid_unknown_fields_are_preserved
+   An unrelated entry is excluded, while a valid paper with missing author,
+   year, and category retains honest unknown fields and the right fallback
+   total. Full results are checked. Covers line 60 / branch 58->60 with a real
+   identity-validation concern, rather than accepting a junk entry as a paper.
+9. test_punctuation_only_search_reports_input_error_without_http
+   '!!!' meets the API's string length requirement but contains no topic terms.
+   Checks an actionable error rather than successful empty results, and verifies
+   no HTTP. Covers line 34 / branch 33->34; the motivation is invalid user input.
+10. test_direct_unconfigured_llm_client_fails_before_http
+    Missing key and missing model both raise the setup error before post. This
+    complements the existing app guard, which does not call LLM.complete at all.
+    Covers line 122 / branch 121->122 and verifies no chargeable attempt occurs.
+
+Provider time is a controlled object and sleep is a Mock that advances it; the
+real process monotonic clock is not replaced. Only HTTP boundaries are mocked
+for service requests. Actual cache decisions, throttling, XML parsing, download
+loops, LLM preconditions, API routes, PDF extraction, and storage execute.
+
+Existing assertions improved and why
+
+Four retained method bodies changed; evidence/retained-test-changes.diff records
+the exact pre-execution edits. No expected outcome was corrected:
+
+- Untrusted redirect rejection previously asserted only a single HTTP call.
+  It now checks the original arXiv URL and disabled automatic redirect behavior.
+  A single request to the wrong destination would no longer satisfy the test.
+- The search-timeout test previously started with an empty library. A hypothetical
+  failure that wiped the library would also leave it empty and could pass. It
+  now seeds a saved paper, compares its complete detail and membership afterward,
+  checks file state, and verifies the request destination/query parameters.
+- The initial connection-failure test now compares the whole saved record,
+  error-only response, raw SQLite pages/pdf_path/analysis state, and all upload
+  entries. The old *.pdf-only assertion could miss a non-PDF orphan, and narrow
+  flags could miss metadata damage. Its network destination/options are explicit.
+- The quota-retry test previously checked only a history length of one after
+  success. A wrong saved answer or task could pass. It now checks exact answer,
+  task/model/source/coverage/warning, API/SQLite agreement, unchanged state after
+  failure, and reuse of the successful result on a third request without HTTP.
+
+These are concrete assertion blind spots found by review, not application bugs
+observed or seeded in this round. No mutation test or synthetic fault injection
+into application code was performed, so no mutation score is claimed.
+
+Bug, incorrect-test, and setup classification
+
+No new application defect was detected by the ten added methods or strengthened
+methods. All four remaining failure events are the same three application defects:
+
+- Analysis kind=[] and kind={} cause unhashable list/dict exceptions at app.py 254
+  and HTTP 500 instead of validation 400: two subcases, one defect.
+- Search page='²' is accepted by isdigit() then rejected by int() at app.py 156,
+  causing HTTP 500 instead of validation 400: one subcase and one defect.
+- A two-line prominent title persists 'Research Libraries' as an extra author,
+  ahead of Dana Tester and Evan Researcher: one ordinary failure and one defect.
+
+Their method source text is unchanged; line numbers in the copied validation
+module shift because an import was added. No failure was converted to a skip,
+expected failure, or acceptance of incorrect output. The metadata defect remains
+a simple synthetic-layout accuracy failure within a best-effort feature; it is
+not proof that every multi-line PDF must extract correctly.
+
+No incorrect new fixture/expected-value pair or setup problem was identified in
+review. That is an agent judgment against the README, user guidance, gold fixture
+data, and explicitly described contracts, not a human-certified proof. Passing
+tests alone do not establish their correctness.
+
+For error cases, the README requires actionable errors; Papertrail's established
+API convention returns PaperError as error-only JSON with HTTP 400. The tests
+check that convention and meaningful error categories, rather than forwarding
+external HTTP 503 or accepting generic 500 responses. This exact status policy
+is a clearly stated application contract, not an arXiv service requirement.
+
+The ten-minute and 3.1-second requirements are explicit in the README. The exact
+redirect attempt count is not: the exhaustion test requires bounded failure and
+uses eight as a fixture guard against hanging, without defining a new product
+policy. The earlier '20 MB' unit ambiguity remains; tests explicitly use the
+configured 20 MiB convention. No new date-priority or general PDF-accuracy policy
+was inferred from source code to force a pass.
+
+Quality beyond coverage and remaining limitations
+
+This strategy added evidence about result identity, expiry boundaries, request
+spacing, failed-result caching, streamed bytes, resource closing, and persisted
+state. Some of its strongest changes exercise code that was already covered:
+TTL/key tests and stronger timeout/quota assertions therefore improve the oracle
+without needing new statements. Coverage alone cannot show those improvements.
+The checks explain how plausible stale-cache, partial-save, or wrong-answer
+regressions would fail, but fault-detection gains were not quantified with mutants.
+The only observed defect-detection evidence remains the same three real defects.
+
+Remaining gaps are recorded rather than filled solely to approach 100%:
+- providers.py still misses line 75 / branch 74->75 (internal capacity eviction)
+  and line 131 / branch 130->131 (optional reasoning setting). The README does
+  not promise an eviction algorithm/capacity, and this round prioritizes failures
+  affecting results and storage over a model-specific request-setting case.
+- Timing tests are deterministic, single-process, and serial. They do not test
+  threaded races, real scheduler delays, provider rate limits, or cache behavior
+  across multiple workers. Invalid/mixed XML examples do not cover every feed
+  shape, encoding, or semantic inconsistency.
+- HTTP doubles simulate requests response/stream contracts; they do not prove
+  behavior over real sockets, proxies, TLS, compression, or every exception type.
+  Redirect host/port variants and actual maximum-hop product policy need more
+  context. The finite fixture guard is not a formal termination proof.
+- Some request assertions pin current timeout tuples. Those protect the current
+  bounded-request contract, but legitimate timeout tuning would require updating
+  the tests. Fixture use of requests.Response's content storage is also coupled
+  to the pinned dependency version; neither is a universal service requirement.
+- app.py remains missing statements 25, 95, 292, 304, including non-object edits,
+  absent readable upload content, deletion during analysis, and server startup.
+  Its six missing branch destinations remain unchanged, including arXiv metadata
+  non-match handling. No server process is launched by these tests.
+- pdf_tools.py remains missing statements 29 and 79, with six missing branch
+  destinations for complexity, title/author edge paths, and budget skipping.
+  Pathological PDF objects, Unicode normalization, disk failures, and complicated
+  metadata layouts remain unestablished. The known metadata bug is not repaired.
+- Database line/branch coverage is 100%, but crash recovery, schema migrations,
+  concurrency, and filesystem failures are not established by those percentages.
+- Frontend interaction/accessibility/layout and live arXiv/LLM availability or
+  actual model answer quality remain outside scope. A mock answer matching the
+  saved answer verifies transport/storage, not independent scientific truth.
+
+Preservation and stop point
+
+Both prior stage directories, their original archives/evidence, and older
+experiments were inventoried and hashed before this round. Initial and round 1
+raw measurement reference copies are hash-identical to their originals. The
+pre-execution frozen-inputs.zip includes the exact round 2 code, changes, design,
+feedback, and application snapshot. The actual round 2 output, native coverage
+database, JSON/text/HTML, diagnostics, and outcome events are preserved unchanged.
+
+The machine-readable comparison and integrity records are separate derived
+artifacts. A final round2-evidence.zip bundles everything, including ignored
+coverage files. Hash checks verify both prior stage inventories, protected file
+contents, known-defect method bodies, and application source unchanged. The
+Homework 1 Git diff is empty. No tests were rerun after the recorded execution;
+only notes, comparison, integrity checks, and packaging followed. No further
+improvement work, application repair, final report, commit, or push was done.

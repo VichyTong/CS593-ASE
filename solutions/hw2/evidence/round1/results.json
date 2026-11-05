@@ -1,0 +1,232 @@
+{
+  "stage": "round1",
+  "source": "baseline",
+  "timestamp": "2026-11-02T19:33:42.661224-06:00",
+  "python": "3.11.4",
+  "packages": {
+    "Flask": "3.1.3",
+    "pypdf": "6.19.0",
+    "requests": "2.34.2",
+    "python-dotenv": "1.2.4",
+    "coverage": "7.17.0"
+  },
+  "tests_run": 45,
+  "passed_test_methods": 45,
+  "failed_test_methods": 0,
+  "failure_events": 0,
+  "errors": 0,
+  "skipped": 0,
+  "successful": true,
+  "line_coverage": 85.82,
+  "branch_coverage": 73.56,
+  "coverage_totals": {
+    "covered_lines": 448,
+    "num_statements": 522,
+    "percent_covered": 82.75862068965517,
+    "percent_covered_display": "83",
+    "missing_lines": 74,
+    "excluded_lines": 0,
+    "percent_statements_covered": 85.82375478927203,
+    "percent_statements_covered_display": "86",
+    "num_branches": 174,
+    "num_partial_branches": 32,
+    "covered_branches": 128,
+    "missing_branches": 46,
+    "percent_branches_covered": 73.5632183908046,
+    "percent_branches_covered_display": "74"
+  },
+  "source_sha256": {
+    "app.py": "a948cc1006a7cd1ca75068f606fe206812cf26c0d220d2c64479ed28f97a873b",
+    "database.py": "3e153005810e995971dfa6c8392353a67c6c8295f8df48f3a397de12678678e3",
+    "pdf_tools.py": "e9635f2032566c0c01587308b33d13dc9a12a01c741f39aea2a5ea83fce205ff",
+    "providers.py": "ba5fe1427719500a87dd43cc974ffb42e2b9768d64d5a96660f63aa4e557dd38"
+  },
+  "test_sha256": {
+    "support.py": "a617da2c4f1b094f99e49be2ccbf0c31c63fbb897ddcaa510b768076eba3efb4",
+    "test_initial.py": "c562e101333bd770e65a1acc3543db45c29c4e760ae637da3e5a18701bbd53e0",
+    "test_round1.py": "5900bd523d6d41c9a574f58939d289b761cc56aee289c46efb465eb590c293b2"
+  },
+  "network": "Session.request blocked; provider boundaries explicitly mocked.",
+  "events": [
+    {
+      "test": "test_initial.InitialTests.test_delete_removes_library_record",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_initial.InitialTests.test_edit_round_trips_all_metadata",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_initial.InitialTests.test_homepage_serves_application",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_initial.InitialTests.test_invalid_pdf_is_rejected_without_saving",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_initial.InitialTests.test_missing_paper_returns_actionable_json",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_initial.InitialTests.test_question_passes_exact_task_and_saves_answer",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_initial.InitialTests.test_real_pdf_upload_extracts_metadata_and_text",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_initial.InitialTests.test_saved_metadata_survives_restart",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_initial.InitialTests.test_saving_same_paper_is_idempotent",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_initial.InitialTests.test_search_preserves_bibliographic_fields",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_initial.InitialTests.test_summary_uses_pdf_content_and_is_saved",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_initial.InitialTests.test_unconfigured_model_reports_setup_error",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_round1.DownloadProviderTests.test_allowed_redirect_streams_exact_bytes",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_round1.DownloadProviderTests.test_invalid_id_never_starts_download",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_round1.DownloadProviderTests.test_network_failure_has_manual_upload_guidance",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_round1.DownloadProviderTests.test_redirect_loop_is_bounded",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_round1.DownloadProviderTests.test_redirect_rejects_untrusted_hosts_http_and_ports",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_round1.DownloadProviderTests.test_streaming_download_rejects_over_twenty_megabytes",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_round1.LLMProviderTests.test_http_contract_sends_context_and_question",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_round1.LLMProviderTests.test_insecure_or_credential_bearing_endpoints_are_rejected",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_round1.LLMProviderTests.test_malformed_and_empty_provider_payloads_are_rejected",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_round1.LLMProviderTests.test_metadata_parses_fenced_json_and_rejects_invalid_shapes",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_round1.LLMProviderTests.test_missing_credentials_prevent_network_request",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_round1.LLMProviderTests.test_provider_credentials_and_quota_errors_are_specific",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_round1.LLMProviderTests.test_timeout_does_not_return_fake_answer",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_round1.LLMProviderTests.test_truncated_answer_is_rejected",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_round1.PDFAndContextTests.test_citation_ranges_and_invalid_ranges_are_bounded",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_round1.PDFAndContextTests.test_corrupt_pdf_has_readable_failure_message",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_round1.PDFAndContextTests.test_empty_context_is_rejected",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_round1.PDFAndContextTests.test_image_only_pdf_requests_ocr",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_round1.PDFAndContextTests.test_long_summary_samples_end_and_respects_budget",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_round1.PDFAndContextTests.test_metadata_fallback_uses_publication_year",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_round1.PDFAndContextTests.test_oversized_pdf_is_rejected_before_parsing",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_round1.PDFAndContextTests.test_password_protected_pdf_is_actionable",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_round1.PDFAndContextTests.test_question_retrieval_selects_late_relevant_evidence",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_round1.PDFAndContextTests.test_short_paper_context_preserves_all_text_and_page_markers",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_round1.PDFAndContextTests.test_zero_and_over_limit_page_counts_are_rejected",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_round1.SearchProviderTests.test_arxiv_error_entry_does_not_look_like_empty_success",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_round1.SearchProviderTests.test_atom_feed_maps_real_bibliographic_fields",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_round1.SearchProviderTests.test_empty_token_query_is_actionable",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_round1.SearchProviderTests.test_expired_cache_refreshes_and_searches_are_throttled",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_round1.SearchProviderTests.test_fresh_search_cache_avoids_second_request",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_round1.SearchProviderTests.test_identifiers_and_arxiv_links_use_id_lookup",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_round1.SearchProviderTests.test_keyword_query_pagination_sort_and_stop_words",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_round1.SearchProviderTests.test_timeout_and_invalid_xml_become_actionable_errors",
+      "outcome": "passed"
+    }
+  ]
+}

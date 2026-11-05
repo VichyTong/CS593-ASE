@@ -1,0 +1,91 @@
+{
+  "coverage_read_from": "solutions/hw2/round1_stage/evidence/round1-only/coverage.json",
+  "coverage_input_sha256": "af7970da22082b8707f8d0676102737ee23d51978b5cbc69252765847e4bb151",
+  "evaluation_read_from": "solutions/hw2/round1_stage/experiment-notes.txt",
+  "evaluation_input_sha256": "0f62b42751b2349a1307015ba5d1112aabc25cbba2913582b6b32a8c528ead6a",
+  "totals": {
+    "covered_lines": 505,
+    "num_statements": 522,
+    "percent_covered": 94.25287356321839,
+    "percent_covered_display": "94",
+    "missing_lines": 17,
+    "excluded_lines": 0,
+    "percent_statements_covered": 96.74329501915709,
+    "percent_statements_covered_display": "97",
+    "num_branches": 174,
+    "num_partial_branches": 21,
+    "covered_branches": 151,
+    "missing_branches": 23,
+    "percent_branches_covered": 86.7816091954023,
+    "percent_branches_covered_display": "87"
+  },
+  "provider_missing_lines_before_round2": [
+    26,
+    34,
+    58,
+    59,
+    60,
+    75,
+    92,
+    98,
+    100,
+    122,
+    131
+  ],
+  "provider_missing_branches_before_round2": [
+    [
+      25,
+      26
+    ],
+    [
+      33,
+      34
+    ],
+    [
+      57,
+      58
+    ],
+    [
+      58,
+      59
+    ],
+    [
+      58,
+      60
+    ],
+    [
+      74,
+      75
+    ],
+    [
+      85,
+      100
+    ],
+    [
+      90,
+      92
+    ],
+    [
+      97,
+      98
+    ],
+    [
+      121,
+      122
+    ],
+    [
+      130,
+      131
+    ]
+  ],
+  "stronger_assertion_methods": [
+    "test_components.ComponentTests.test_invalid_id_and_untrusted_pdf_redirect_are_rejected",
+    "test_validation.ValidationTests.test_failed_pdf_download_leaves_content_unset",
+    "test_validation.ValidationTests.test_llm_quota_error_is_not_cached_and_retry_can_succeed",
+    "test_validation.ValidationTests.test_search_timeout_is_actionable_and_leaves_library_unchanged"
+  ],
+  "not_expanded_for_percentage_alone": [
+    "undocumented cache capacity/eviction policy",
+    "optional model reasoning configuration"
+  ]
+}

@@ -1,0 +1,37 @@
+Unexpected request failure
+Traceback (most recent call last):
+  File "/Users/tong172/Desktop/projects/593-ASE/solutions/hw1/.venv/lib/python3.11/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tong172/Desktop/projects/593-ASE/solutions/hw1/.venv/lib/python3.11/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tong172/Desktop/projects/593-ASE/solutions/hw1/app.py", line 254, in analyze
+    if not isinstance(body, dict) or body.get('kind') not in {'summary', 'question'}:
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: unhashable type: 'list'
+Unexpected request failure
+Traceback (most recent call last):
+  File "/Users/tong172/Desktop/projects/593-ASE/solutions/hw1/.venv/lib/python3.11/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tong172/Desktop/projects/593-ASE/solutions/hw1/.venv/lib/python3.11/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tong172/Desktop/projects/593-ASE/solutions/hw1/app.py", line 254, in analyze
+    if not isinstance(body, dict) or body.get('kind') not in {'summary', 'question'}:
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: unhashable type: 'dict'
+Unexpected request failure
+Traceback (most recent call last):
+  File "/Users/tong172/Desktop/projects/593-ASE/solutions/hw1/.venv/lib/python3.11/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tong172/Desktop/projects/593-ASE/solutions/hw1/.venv/lib/python3.11/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tong172/Desktop/projects/593-ASE/solutions/hw1/app.py", line 156, in search
+    if sort not in {'relevance', 'submittedDate'} or not page.isdigit() or not 1 <= int(page) <= 100:
+                                                                                    ^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '²'
+EOF marker not found

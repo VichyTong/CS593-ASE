@@ -1,0 +1,564 @@
+{
+  "comparison_scope": "initial HW2-only versus round 1 HW2-only; no legacy HW1 tests or older experiments",
+  "initial_source": "solutions/hw2/initial_stage/evidence/initial-only",
+  "round1_source": "solutions/hw2/round1_stage/evidence/round1-only",
+  "same_application_hashes": true,
+  "same_coverage_configuration": true,
+  "same_python_and_packages": true,
+  "measured_application_files": [
+    "solutions/hw1/app.py",
+    "solutions/hw1/database.py",
+    "solutions/hw1/pdf_tools.py",
+    "solutions/hw1/providers.py"
+  ],
+  "initial_was_not_rerun": true,
+  "initial_test_corrections": [],
+  "added_test_ids": [
+    "test_pdf_round1.PDFEnrichmentTests.test_optional_ai_metadata_failures_preserve_pdf_fallback_and_review_notice",
+    "test_pdf_round1.PDFLimitTests.test_oversized_multipart_request_returns_413_without_storage",
+    "test_pdf_round1.PDFLimitTests.test_page_count_accepts_one_and_150_and_rejects_zero_and_151",
+    "test_pdf_round1.PDFLimitTests.test_pdf_file_size_boundary_is_accepted_and_one_extra_byte_is_rejected",
+    "test_pdf_round1.PDFLimitTests.test_total_extracted_text_at_limit_and_one_character_either_side",
+    "test_pdf_round1.PDFMetadataTests.test_absent_author_and_publication_year_are_not_invented",
+    "test_pdf_round1.PDFMetadataTests.test_multiline_prominent_title_is_not_misidentified_as_an_author",
+    "test_pdf_round1.PDFMetadataTests.test_pdf_without_document_metadata_extracts_clear_title_byline_and_date"
+  ],
+  "outcomes": {
+    "initial": {
+      "tests_run": 37,
+      "passed_test_methods": 35,
+      "failed_test_methods": 2,
+      "failure_events": 3,
+      "error_events": 0,
+      "skipped": 0,
+      "line_coverage_percent": 90.80459770114942,
+      "branch_coverage_percent": 77.58620689655173,
+      "failed_subtest_events": 3,
+      "ordinary_failure_events": 0,
+      "failures": [
+        {
+          "test": "test_validation.ValidationTests.test_invalid_analysis_payloads_are_client_errors_without_provider_calls",
+          "subtest": "test_invalid_analysis_payloads_are_client_errors_without_provider_calls (test_validation.ValidationTests.test_invalid_analysis_payloads_are_client_errors_without_provider_calls) (payload={'kind': []})",
+          "outcome": "failed_subtest",
+          "traceback": "Traceback (most recent call last):\n  File \"/Users/tong172/Desktop/projects/593-ASE/solutions/hw2/initial_stage/tests/test_validation.py\", line 97, in test_invalid_analysis_payloads_are_client_errors_without_provider_calls\n    self.assertEqual(response.status_code, 400, response.json)\nAssertionError: 500 != 400 : {'error': 'Something went wrong on the server. Please try again.'}\n"
+        },
+        {
+          "test": "test_validation.ValidationTests.test_invalid_analysis_payloads_are_client_errors_without_provider_calls",
+          "subtest": "test_invalid_analysis_payloads_are_client_errors_without_provider_calls (test_validation.ValidationTests.test_invalid_analysis_payloads_are_client_errors_without_provider_calls) (payload={'kind': {}})",
+          "outcome": "failed_subtest",
+          "traceback": "Traceback (most recent call last):\n  File \"/Users/tong172/Desktop/projects/593-ASE/solutions/hw2/initial_stage/tests/test_validation.py\", line 97, in test_invalid_analysis_payloads_are_client_errors_without_provider_calls\n    self.assertEqual(response.status_code, 400, response.json)\nAssertionError: 500 != 400 : {'error': 'Something went wrong on the server. Please try again.'}\n"
+        },
+        {
+          "test": "test_validation.ValidationTests.test_invalid_search_parameters_are_client_errors",
+          "subtest": "test_invalid_search_parameters_are_client_errors (test_validation.ValidationTests.test_invalid_search_parameters_are_client_errors) (args={'q': 'testing', 'page': '\u00b2'})",
+          "outcome": "failed_subtest",
+          "traceback": "Traceback (most recent call last):\n  File \"/Users/tong172/Desktop/projects/593-ASE/solutions/hw2/initial_stage/tests/test_validation.py\", line 24, in test_invalid_search_parameters_are_client_errors\n    self.assertEqual(response.status_code, 400, response.json)\nAssertionError: 500 != 400 : {'error': 'Something went wrong on the server. Please try again.'}\n"
+        }
+      ],
+      "recorded_process_exit_code": 1
+    },
+    "round1": {
+      "tests_run": 45,
+      "passed_test_methods": 42,
+      "failed_test_methods": 3,
+      "failure_events": 4,
+      "error_events": 0,
+      "skipped": 0,
+      "line_coverage_percent": 96.74329501915709,
+      "branch_coverage_percent": 86.7816091954023,
+      "failed_subtest_events": 3,
+      "ordinary_failure_events": 1,
+      "failures": [
+        {
+          "test": "test_pdf_round1.PDFMetadataTests.test_multiline_prominent_title_is_not_misidentified_as_an_author",
+          "outcome": "failed",
+          "traceback": "Traceback (most recent call last):\n  File \"/Users/tong172/Desktop/projects/593-ASE/solutions/hw2/round1_stage/tests/test_pdf_round1.py\", line 177, in test_multiline_prominent_title_is_not_misidentified_as_an_author\n    self.assert_fallback_metadata(detail)\n  File \"/Users/tong172/Desktop/projects/593-ASE/solutions/hw2/round1_stage/tests/test_pdf_round1.py\", line 71, in assert_fallback_metadata\n    self.assertEqual(paper['authors'], authors)\nAssertionError: Lists differ: ['Research Libraries', 'Dana Tester', 'Evan Researcher'] != ['Dana Tester', 'Evan Researcher']\n\nFirst differing element 0:\n'Research Libraries'\n'Dana Tester'\n\nFirst list contains 1 additional elements.\nFirst extra element 2:\n'Evan Researcher'\n\n- ['Research Libraries', 'Dana Tester', 'Evan Researcher']\n?  ----------------------\n\n+ ['Dana Tester', 'Evan Researcher']\n"
+        },
+        {
+          "test": "test_validation.ValidationTests.test_invalid_analysis_payloads_are_client_errors_without_provider_calls",
+          "subtest": "test_invalid_analysis_payloads_are_client_errors_without_provider_calls (test_validation.ValidationTests.test_invalid_analysis_payloads_are_client_errors_without_provider_calls) (payload={'kind': []})",
+          "outcome": "failed_subtest",
+          "traceback": "Traceback (most recent call last):\n  File \"/Users/tong172/Desktop/projects/593-ASE/solutions/hw2/round1_stage/tests/test_validation.py\", line 97, in test_invalid_analysis_payloads_are_client_errors_without_provider_calls\n    self.assertEqual(response.status_code, 400, response.json)\nAssertionError: 500 != 400 : {'error': 'Something went wrong on the server. Please try again.'}\n"
+        },
+        {
+          "test": "test_validation.ValidationTests.test_invalid_analysis_payloads_are_client_errors_without_provider_calls",
+          "subtest": "test_invalid_analysis_payloads_are_client_errors_without_provider_calls (test_validation.ValidationTests.test_invalid_analysis_payloads_are_client_errors_without_provider_calls) (payload={'kind': {}})",
+          "outcome": "failed_subtest",
+          "traceback": "Traceback (most recent call last):\n  File \"/Users/tong172/Desktop/projects/593-ASE/solutions/hw2/round1_stage/tests/test_validation.py\", line 97, in test_invalid_analysis_payloads_are_client_errors_without_provider_calls\n    self.assertEqual(response.status_code, 400, response.json)\nAssertionError: 500 != 400 : {'error': 'Something went wrong on the server. Please try again.'}\n"
+        },
+        {
+          "test": "test_validation.ValidationTests.test_invalid_search_parameters_are_client_errors",
+          "subtest": "test_invalid_search_parameters_are_client_errors (test_validation.ValidationTests.test_invalid_search_parameters_are_client_errors) (args={'q': 'testing', 'page': '\u00b2'})",
+          "outcome": "failed_subtest",
+          "traceback": "Traceback (most recent call last):\n  File \"/Users/tong172/Desktop/projects/593-ASE/solutions/hw2/round1_stage/tests/test_validation.py\", line 24, in test_invalid_search_parameters_are_client_errors\n    self.assertEqual(response.status_code, 400, response.json)\nAssertionError: 500 != 400 : {'error': 'Something went wrong on the server. Please try again.'}\n"
+        }
+      ],
+      "recorded_process_exit_code": 1
+    }
+  },
+  "coverage": {
+    "solutions/hw1/app.py": {
+      "initial": {
+        "covered_lines": 241,
+        "statements": 247,
+        "line_percent": 97.57085020242916,
+        "covered_branches": 68,
+        "branches": 74,
+        "branch_percent": 91.89189189189189,
+        "missing_lines": [
+          25,
+          95,
+          208,
+          209,
+          292,
+          304
+        ],
+        "missing_branches": [
+          [
+            24,
+            25
+          ],
+          [
+            54,
+            56
+          ],
+          [
+            94,
+            95
+          ],
+          [
+            199,
+            204
+          ],
+          [
+            291,
+            292
+          ],
+          [
+            303,
+            304
+          ]
+        ]
+      },
+      "round1": {
+        "covered_lines": 243,
+        "statements": 247,
+        "line_percent": 98.38056680161944,
+        "covered_branches": 68,
+        "branches": 74,
+        "branch_percent": 91.89189189189189,
+        "missing_lines": [
+          25,
+          95,
+          292,
+          304
+        ],
+        "missing_branches": [
+          [
+            24,
+            25
+          ],
+          [
+            54,
+            56
+          ],
+          [
+            94,
+            95
+          ],
+          [
+            199,
+            204
+          ],
+          [
+            291,
+            292
+          ],
+          [
+            303,
+            304
+          ]
+        ]
+      },
+      "added_executed_lines": [
+        208,
+        209
+      ],
+      "lost_executed_lines": [],
+      "line_percentage_point_change": 0.8097165991902813,
+      "branch_percentage_point_change": 0.0
+    },
+    "solutions/hw1/database.py": {
+      "initial": {
+        "covered_lines": 34,
+        "statements": 34,
+        "line_percent": 100.0,
+        "covered_branches": 2,
+        "branches": 2,
+        "branch_percent": 100.0,
+        "missing_lines": [],
+        "missing_branches": []
+      },
+      "round1": {
+        "covered_lines": 34,
+        "statements": 34,
+        "line_percent": 100.0,
+        "covered_branches": 2,
+        "branches": 2,
+        "branch_percent": 100.0,
+        "missing_lines": [],
+        "missing_branches": []
+      },
+      "added_executed_lines": [],
+      "lost_executed_lines": [],
+      "line_percentage_point_change": 0.0,
+      "branch_percentage_point_change": 0.0
+    },
+    "solutions/hw1/pdf_tools.py": {
+      "initial": {
+        "covered_lines": 83,
+        "statements": 111,
+        "line_percent": 74.77477477477477,
+        "covered_branches": 31,
+        "branches": 52,
+        "branch_percent": 59.61538461538461,
+        "missing_lines": [
+          18,
+          24,
+          29,
+          33,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          65,
+          67,
+          71,
+          72,
+          73,
+          74,
+          75,
+          76,
+          77,
+          79,
+          88,
+          89
+        ],
+        "missing_branches": [
+          [
+            17,
+            18
+          ],
+          [
+            23,
+            24
+          ],
+          [
+            28,
+            29
+          ],
+          [
+            32,
+            33
+          ],
+          [
+            40,
+            41
+          ],
+          [
+            44,
+            -42
+          ],
+          [
+            44,
+            45
+          ],
+          [
+            47,
+            48
+          ],
+          [
+            47,
+            53
+          ],
+          [
+            51,
+            52
+          ],
+          [
+            51,
+            53
+          ],
+          [
+            64,
+            65
+          ],
+          [
+            70,
+            71
+          ],
+          [
+            72,
+            73
+          ],
+          [
+            72,
+            80
+          ],
+          [
+            73,
+            74
+          ],
+          [
+            73,
+            75
+          ],
+          [
+            76,
+            77
+          ],
+          [
+            76,
+            79
+          ],
+          [
+            87,
+            88
+          ],
+          [
+            132,
+            130
+          ]
+        ]
+      },
+      "round1": {
+        "covered_lines": 109,
+        "statements": 111,
+        "line_percent": 98.1981981981982,
+        "covered_branches": 46,
+        "branches": 52,
+        "branch_percent": 88.46153846153847,
+        "missing_lines": [
+          29,
+          79
+        ],
+        "missing_branches": [
+          [
+            28,
+            29
+          ],
+          [
+            47,
+            53
+          ],
+          [
+            51,
+            53
+          ],
+          [
+            72,
+            80
+          ],
+          [
+            76,
+            79
+          ],
+          [
+            132,
+            130
+          ]
+        ]
+      },
+      "added_executed_lines": [
+        18,
+        24,
+        33,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        65,
+        67,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        88,
+        89
+      ],
+      "lost_executed_lines": [],
+      "line_percentage_point_change": 23.42342342342343,
+      "branch_percentage_point_change": 28.846153846153854
+    },
+    "solutions/hw1/providers.py": {
+      "initial": {
+        "covered_lines": 116,
+        "statements": 130,
+        "line_percent": 89.23076923076923,
+        "covered_branches": 34,
+        "branches": 46,
+        "branch_percent": 73.91304347826087,
+        "missing_lines": [
+          26,
+          34,
+          58,
+          59,
+          60,
+          75,
+          92,
+          98,
+          100,
+          122,
+          131,
+          161,
+          163,
+          164
+        ],
+        "missing_branches": [
+          [
+            25,
+            26
+          ],
+          [
+            33,
+            34
+          ],
+          [
+            57,
+            58
+          ],
+          [
+            58,
+            59
+          ],
+          [
+            58,
+            60
+          ],
+          [
+            74,
+            75
+          ],
+          [
+            85,
+            100
+          ],
+          [
+            90,
+            92
+          ],
+          [
+            97,
+            98
+          ],
+          [
+            121,
+            122
+          ],
+          [
+            130,
+            131
+          ],
+          [
+            160,
+            161
+          ]
+        ]
+      },
+      "round1": {
+        "covered_lines": 119,
+        "statements": 130,
+        "line_percent": 91.53846153846153,
+        "covered_branches": 35,
+        "branches": 46,
+        "branch_percent": 76.08695652173913,
+        "missing_lines": [
+          26,
+          34,
+          58,
+          59,
+          60,
+          75,
+          92,
+          98,
+          100,
+          122,
+          131
+        ],
+        "missing_branches": [
+          [
+            25,
+            26
+          ],
+          [
+            33,
+            34
+          ],
+          [
+            57,
+            58
+          ],
+          [
+            58,
+            59
+          ],
+          [
+            58,
+            60
+          ],
+          [
+            74,
+            75
+          ],
+          [
+            85,
+            100
+          ],
+          [
+            90,
+            92
+          ],
+          [
+            97,
+            98
+          ],
+          [
+            121,
+            122
+          ],
+          [
+            130,
+            131
+          ]
+        ]
+      },
+      "added_executed_lines": [
+        161,
+        163,
+        164
+      ],
+      "lost_executed_lines": [],
+      "line_percentage_point_change": 2.3076923076923066,
+      "branch_percentage_point_change": 2.173913043478251
+    }
+  }
+}

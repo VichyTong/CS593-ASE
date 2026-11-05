@@ -1,0 +1,136 @@
+Round 2 design and setup before execution
+
+The actual user feedback is saved in feedback-request.txt. The requested strategy
+is to use execution feedback and coverage analysis for meaningful provider tests,
+retain the prior regressions, and strengthen weak assertions. No application
+change or final homework report is authorized for this round.
+
+Evidence inspected and priorities
+
+The actual round1_stage/evidence/round1-only/coverage.json and experiment-notes.txt
+were read before test design. They report 45 methods, 42 passes, 3 failed methods,
+4 failure events, and 505/522 lines plus 151/174 branch destinations covered.
+providers.py has 119/130 lines and 35/46 branch destinations covered. Its missing
+lines are 26, 34, 58-60, 75, 92, 98, 100, 122, and 131. Missing provider branches
+are 25->26, 33->34, 57->58, 58->59, 58->60, 74->75, 85->100, 90->92, 97->98,
+121->122, and 130->131. The actual source and README were also inspected.
+
+Priorities are stale/wrong cached search results, external-service request
+spacing, safe bounded downloads, failure recovery without false saved content,
+and actionable feed/model errors. Cache expiry has a clear documented contract
+but no dedicated missed statement; it is included because coverage cannot show
+whether the boundary is right. Optional reasoning fields and the internal cache
+capacity/eviction policy are not expanded just to eliminate remaining misses.
+
+Expected behavior and fixture contracts
+
+Search timing and keys
+- The README says ten-minute per-process caching and at least 3.1 seconds
+  between searches. A controlled mutable monotonic clock starts at 1000.0.
+  Its sleep is a Mock that advances virtual time; it never waits in real time.
+  The provider's time reference is replaced with this object so the process's
+  real monotonic clock (including unittest timing) is not patched globally.
+- A response at 1000 is reused at 1599.99, refreshed at exactly 1600, reused
+  at 2199.99, and refreshed again at 2200.25. Three distinct bibliographic
+  payloads prove which response is returned, not just how often get is called.
+- Different topic, page, and sort combinations receive four different results.
+  All four are revisited before expiry and must retain their own result without
+  more HTTP. Request start offsets, keyword terms, and sort options are checked.
+- A search at 1001 after one at 1000 must request only the missing 2.1 seconds
+  and send at 1003.1. A later search at 1007 needs no sleep. HTTP timestamps and
+  returned data are checked, with a tiny floating-point tolerance on spacing.
+- Empty process state is supplied at setup. Actual search/cache/throttle code
+  runs; no search_papers function or cache-hit decision is mocked.
+
+PDF download and API state
+- Relative redirects within HTTPS arxiv.org and a move to HTTPS export.arxiv.org
+  are treated as permitted official-provider locations. A two-redirect chain
+  must request each destination with automatic redirect following disabled,
+  return the exact final PDF bytes, avoid reading redirect bodies, and close
+  every HTTP response. The existing untrusted-host regression remains too.
+- The README does not specify a numerical redirect count. A self-redirecting
+  response must fail with a bounded-redirect error rather than succeed or hang.
+  The fixture guard fails after eight HTTP invocations if the provider does
+  not enforce a bound; eight is a test hang guard, not a required product limit.
+  The test does not demand the implementation's exact current attempt count.
+- Streamed PDFs at 20 MiB and 20 MiB+1 test inclusive success and rejection
+  using actual streaming loops and independent byte hashes. The documented
+  '20 MB' decimal/binary ambiguity from round 1 remains; this checks the explicit
+  configured 20 MiB convention. No application limit is patched or reduced.
+- API-level interrupted, oversized, self-redirecting, and HTTP-503 downloads
+  must return a client-facing error and retain the previously saved arXiv paper
+  exactly, with empty pages/PDF state, no analyses, and no upload entries.
+- The interrupted transfer yields a complete-looking readable PDF before a
+  ChunkedEncodingError. Transport failure must still take precedence. This
+  catches mistakenly accepting buffered data as a completed transfer. A clean
+  API retry must issue a new download and save the exact fresh PDF/text.
+- HTTP doubles implement context closing, actual iteration, redirect status,
+  and HTTP errors. Only requests.get is replaced; download_paper, extract_pdf,
+  the app handler, and database logic execute normally.
+
+Feeds and client errors
+- Malformed XML is a provider failure, not a successful empty search. An Atom
+  error entry is a failed search, even if a normal entry precedes it. The API
+  must return an actionable error, preserve an existing library record, and
+  allow a real-provider retry with the same query to refresh rather than cache
+  the failure. A further repeat should cache the successful recovery.
+- A separate valid feed with an unrelated non-arXiv entry must not expose that
+  entry as an arXiv paper. The valid paper's missing author/year/category fields
+  stay unknown. This is identity validation and honest metadata, not a demand
+  that every malformed entry abort an otherwise usable response.
+- A punctuation-only topic has no searchable keywords: it should produce the
+  existing actionable input error without HTTP, not fake successful results.
+- The documented missing-model setup error also applies to a directly used LLM
+  client. Missing key or missing model must raise PaperError before HTTP. This
+  complements the existing app-level guard, which never calls the client.
+
+Existing assertions strengthened in the round 2 copies only
+
+1. ComponentTests.test_invalid_id_and_untrusted_pdf_redirect_are_rejected
+   Previously a single get call was enough. Now its original arXiv destination,
+   stream option, and disabled automatic redirects are checked. A wrong initial
+   destination could satisfy only the old count assertion. ID validation and
+   rejection expectations are retained.
+2. ValidationTests.test_search_timeout_is_actionable_and_leaves_library_unchanged
+   Previously the library started empty. A hypothetical accidental wipe would
+   still satisfy that assertion. Now an existing paper is seeded and fully
+   compared afterward, with library membership, file state, request destination,
+   and query parameters checked. This is an example of a prior blind spot,
+   not a claim that an actual wipe was observed or seeded.
+3. ValidationTests.test_failed_pdf_download_leaves_content_unset
+   Adds the exact request contract, error-only response shape, full record
+   equality, has_full_text, raw SQLite pages/pdf_path/analysis state, and all
+   uploads entries. The old *.pdf check could miss a differently named orphan;
+   its narrower field checks could miss other record damage.
+4. ValidationTests.test_llm_quota_error_is_not_cached_and_retry_can_succeed
+   The prior length-only history check could accept a wrong saved answer or
+   task. Now failure leaves the full record and SQLite unchanged; recovery
+   returns and stores the exact known answer, task, model, sources, and warning;
+   a third request reuses that successful analysis without another HTTP call.
+   Both HTTP attempts must contain the model and source evidence.
+
+These four are assertion improvements, not corrections of an identified wrong
+expected outcome. All 45 round 1 test method identities are retained. The three
+methods exposing the known analysis-kind, Unicode-page, and title-as-author
+defects are preserved exactly; neither their assertions nor their status are
+changed. Ten new provider methods bring the planned total to 55 HW2 methods.
+
+Preservation, execution plan, and setup
+
+The full initial_stage and round1_stage file inventories and hashes, plus older
+experiment files, were captured before editing any round 2 copies. Both prior
+directories are read-only inputs to this experiment. Only new round2_stage
+files are written. Expected outcome corrections: none.
+
+The new runner has its own entry point and the same four application modules,
+coverage.py options, and 522/174 denominator. The initial and round 1 original
+HW2-only results are reference inputs, not reruns. Legacy HW1 tests and older
+experiments are excluded. A pre-execution ZIP and manifest preserve all round 2
+code and inputs. Later results/comparisons are separate artifacts.
+
+The existing Python 3.11 environment and package versions are reused. No online
+calls or dependency installations are needed. Dotenv loading is disabled,
+inherited credentials/configuration are cleared, and dummy keys/temporary
+SQLite/PDF storage used. Real HTTP and sockets are blocked. Inherited initial
+and PDF fixtures stay unchanged. No application tests have run during authoring
+of this design record; AST parsing will check syntax before freezing.

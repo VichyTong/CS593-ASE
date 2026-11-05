@@ -1,0 +1,14 @@
+{
+  "verified_at": "2026-11-02T19:51:52.526509-06:00",
+  "frozen_input_count": 19,
+  "frozen_inputs_unchanged": true,
+  "pre_existing_hw2_artifact_count": 21,
+  "pre_existing_hw2_artifacts_unchanged": true,
+  "frozen_zip_valid_and_matches_manifest": true,
+  "all_coverage_scopes_match_exact_four_file_list": true,
+  "combined_executed_lines_equal_union_of_individual_suites": true,
+  "network_attempts_in_all_runs": 0,
+  "git_diff_hw1_exit_code": 0,
+  "git_diff_hw1_empty": true,
+  "additional_test_executions_during_integrity_check": 0
+}

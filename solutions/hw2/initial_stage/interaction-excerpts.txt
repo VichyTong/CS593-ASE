@@ -1,0 +1,27 @@
+Selected genuine English interaction excerpts from this stage
+
+These are selected exact message contents from the current chat, not a full
+transcript, invented conversation, or screenshot evidence. No timestamps are
+assigned to individual chat messages here. The actual user task is preserved
+separately in generation-request.txt with line wrapping normalized. Execution
+timestamps and commands are in evidence/*/results.json.
+
+Assistant, opening progress message:
+
+I’ll inspect Papertrail’s requirements, code, and existing tests, then create a separate Homework 2 suite with temporary storage and mocked services. I’ll preserve the test results and coverage evidence, evaluate the gaps, and stop before any improvement round or application changes.
+
+Assistant, after inspecting existing files:
+
+I found the 14 Homework 1 tests, plus existing Homework 2 files containing an initial suite and a round 1 suite. I’ll leave those files untouched and put this stage in a separate directory, with its own tests and evidence, so this run cannot be confused with the earlier work.
+
+Assistant, before first execution:
+
+The new suite is drafted. It checks stored records, extracted PDF text and bytes, analysis history, request payloads, cache reuse, validation, and access control.
+
+I’m preparing the snapshot before the first run. If a test fails, I’ll preserve that result and assess whether the cause is an application bug, an incorrect test, or a setup problem.
+
+Assistant, after all three measurements:
+
+The 37 new test methods ran: 35 passed and 2 failed, with three failing subcases. The failures expose two validation bugs: an array or object in the analysis `kind` field returns HTTP 500, and `page=²` in search also returns 500. Both should be rejected as invalid input.
+
+The 14 Homework 1 tests passed. I’ve preserved all three runs and their coverage results. I’m now reviewing assertion quality and coverage gaps; the frozen tests and application code remain unchanged.

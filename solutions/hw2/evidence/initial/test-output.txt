@@ -1,0 +1,17 @@
+test_delete_removes_library_record (test_initial.InitialTests.test_delete_removes_library_record) ... ok
+test_edit_round_trips_all_metadata (test_initial.InitialTests.test_edit_round_trips_all_metadata) ... ok
+test_homepage_serves_application (test_initial.InitialTests.test_homepage_serves_application) ... ok
+test_invalid_pdf_is_rejected_without_saving (test_initial.InitialTests.test_invalid_pdf_is_rejected_without_saving) ... ok
+test_missing_paper_returns_actionable_json (test_initial.InitialTests.test_missing_paper_returns_actionable_json) ... ok
+test_question_passes_exact_task_and_saves_answer (test_initial.InitialTests.test_question_passes_exact_task_and_saves_answer) ... ok
+test_real_pdf_upload_extracts_metadata_and_text (test_initial.InitialTests.test_real_pdf_upload_extracts_metadata_and_text) ... ok
+test_saved_metadata_survives_restart (test_initial.InitialTests.test_saved_metadata_survives_restart) ... ok
+test_saving_same_paper_is_idempotent (test_initial.InitialTests.test_saving_same_paper_is_idempotent) ... ok
+test_search_preserves_bibliographic_fields (test_initial.InitialTests.test_search_preserves_bibliographic_fields) ... ok
+test_summary_uses_pdf_content_and_is_saved (test_initial.InitialTests.test_summary_uses_pdf_content_and_is_saved) ... ok
+test_unconfigured_model_reports_setup_error (test_initial.InitialTests.test_unconfigured_model_reports_setup_error) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.176s
+
+OK

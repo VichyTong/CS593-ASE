@@ -1,0 +1,19 @@
+test_analysis_uses_pdf_text_and_persists_and_caches (test_app.AppTests.test_analysis_uses_pdf_text_and_persists_and_caches) ... ok
+test_delete_preserves_shared_pdf_and_cascades_notes (test_app.AppTests.test_delete_preserves_shared_pdf_and_cascades_notes) ... ok
+test_edit_and_input_validation (test_app.AppTests.test_edit_and_input_validation) ... ok
+test_invalid_upload_and_unknown_paper_are_actionable (test_app.AppTests.test_invalid_upload_and_unknown_paper_are_actionable) ... ok
+test_llm_http_contract_and_provider_errors (test_app.AppTests.test_llm_http_contract_and_provider_errors) ... ok
+test_long_paper_context_includes_end_and_retrieves_evidence (test_app.AppTests.test_long_paper_context_includes_end_and_retrieves_evidence) ... ok
+test_missing_model_never_returns_canned_summary (test_app.AppTests.test_missing_model_never_returns_canned_summary) ... ok
+test_natural_title_search_does_not_require_stop_words (test_app.AppTests.test_natural_title_search_does_not_require_stop_words) ... ok
+test_pdf_metadata_uses_publication_year_not_dataset_year (test_app.AppTests.test_pdf_metadata_uses_publication_year_not_dataset_year) ... ok
+test_pdf_upload_metadata_text_and_deduplication (test_app.AppTests.test_pdf_upload_metadata_text_and_deduplication) ... ok
+test_provider_failure_and_cross_origin_writes (test_app.AppTests.test_provider_failure_and_cross_origin_writes) ... ok
+test_search_and_save_persist_across_restart (test_app.AppTests.test_search_and_save_persist_across_restart) ... ok
+test_summary_downloads_content_and_checks_citations (test_app.AppTests.test_summary_downloads_content_and_checks_citations) ... ok
+test_upload_enriches_metadata_using_identifier_from_pdf (test_app.AppTests.test_upload_enriches_metadata_using_identifier_from_pdf) ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 0.181s
+
+OK

@@ -1,0 +1,158 @@
+{
+  "stage": "initial generation and evaluation only",
+  "suite": "legacy",
+  "started_at": "2026-11-02T19:46:48.360985-06:00",
+  "finished_at": "2026-11-02T19:46:48.837288-06:00",
+  "command_arguments": [
+    "solutions/hw2/initial_stage/run_initial.py",
+    "--suite",
+    "legacy",
+    "--output",
+    "solutions/hw2/initial_stage/evidence/hw1-only"
+  ],
+  "working_directory": "/Users/tong172/Desktop/projects/593-ASE",
+  "python": "3.11.4",
+  "python_executable": "/Users/tong172/Desktop/projects/593-ASE/solutions/hw1/.venv/bin/python",
+  "packages": {
+    "Flask": "3.1.3",
+    "pypdf": "6.19.0",
+    "requests": "2.34.2",
+    "python-dotenv": "1.2.4",
+    "gunicorn": "26.2.0",
+    "coverage": "7.17.0"
+  },
+  "measured_application_files": [
+    "solutions/hw1/app.py",
+    "solutions/hw1/database.py",
+    "solutions/hw1/pdf_tools.py",
+    "solutions/hw1/providers.py"
+  ],
+  "included_test_files": [
+    "solutions/hw1/tests/test_app.py"
+  ],
+  "excluded_tests": [
+    "solutions/hw2/tests/test_initial.py",
+    "solutions/hw2/tests/test_round1.py"
+  ],
+  "coverage_configuration": {
+    "branch": true,
+    "config_file": false,
+    "include": [
+      "solutions/hw1/app.py",
+      "solutions/hw1/database.py",
+      "solutions/hw1/pdf_tools.py",
+      "solutions/hw1/providers.py"
+    ],
+    "omit": []
+  },
+  "tests_run": 14,
+  "discovered_test_ids": [
+    "test_app.AppTests.test_analysis_uses_pdf_text_and_persists_and_caches",
+    "test_app.AppTests.test_delete_preserves_shared_pdf_and_cascades_notes",
+    "test_app.AppTests.test_edit_and_input_validation",
+    "test_app.AppTests.test_invalid_upload_and_unknown_paper_are_actionable",
+    "test_app.AppTests.test_llm_http_contract_and_provider_errors",
+    "test_app.AppTests.test_long_paper_context_includes_end_and_retrieves_evidence",
+    "test_app.AppTests.test_missing_model_never_returns_canned_summary",
+    "test_app.AppTests.test_natural_title_search_does_not_require_stop_words",
+    "test_app.AppTests.test_pdf_metadata_uses_publication_year_not_dataset_year",
+    "test_app.AppTests.test_pdf_upload_metadata_text_and_deduplication",
+    "test_app.AppTests.test_provider_failure_and_cross_origin_writes",
+    "test_app.AppTests.test_search_and_save_persist_across_restart",
+    "test_app.AppTests.test_summary_downloads_content_and_checks_citations",
+    "test_app.AppTests.test_upload_enriches_metadata_using_identifier_from_pdf"
+  ],
+  "passed_test_methods": 14,
+  "failed_test_methods": 0,
+  "failure_events": 0,
+  "error_events": 0,
+  "skipped": 0,
+  "successful": true,
+  "line_coverage_percent": 80.07662835249042,
+  "branch_coverage_percent": 61.49425287356322,
+  "coverage_py_combined_percent": 75.43103448275862,
+  "coverage_totals": {
+    "covered_lines": 418,
+    "num_statements": 522,
+    "percent_covered": 75.43103448275862,
+    "percent_covered_display": "75",
+    "missing_lines": 104,
+    "excluded_lines": 0,
+    "percent_statements_covered": 80.07662835249042,
+    "percent_statements_covered_display": "80",
+    "num_branches": 174,
+    "num_partial_branches": 41,
+    "covered_branches": 107,
+    "missing_branches": 67,
+    "percent_branches_covered": 61.49425287356322,
+    "percent_branches_covered_display": "61"
+  },
+  "source_sha256": {
+    "solutions/hw1/app.py": "a948cc1006a7cd1ca75068f606fe206812cf26c0d220d2c64479ed28f97a873b",
+    "solutions/hw1/database.py": "3e153005810e995971dfa6c8392353a67c6c8295f8df48f3a397de12678678e3",
+    "solutions/hw1/pdf_tools.py": "e9635f2032566c0c01587308b33d13dc9a12a01c741f39aea2a5ea83fce205ff",
+    "solutions/hw1/providers.py": "ba5fe1427719500a87dd43cc974ffb42e2b9768d64d5a96660f63aa4e557dd38"
+  },
+  "frozen_manifest_sha256": "25a3479e66d61355a5a5986322283e1641ba35e035f3fc018bd0946986f2ef94",
+  "frozen_inputs_verified_after_run": true,
+  "network_attempts": [],
+  "isolation": "dotenv disabled; environment cleared; temporary SQLite/PDF storage; dummy credentials only; Session.request and socket connections blocked",
+  "events": [
+    {
+      "test": "test_app.AppTests.test_analysis_uses_pdf_text_and_persists_and_caches",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_app.AppTests.test_delete_preserves_shared_pdf_and_cascades_notes",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_app.AppTests.test_edit_and_input_validation",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_app.AppTests.test_invalid_upload_and_unknown_paper_are_actionable",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_app.AppTests.test_llm_http_contract_and_provider_errors",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_app.AppTests.test_long_paper_context_includes_end_and_retrieves_evidence",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_app.AppTests.test_missing_model_never_returns_canned_summary",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_app.AppTests.test_natural_title_search_does_not_require_stop_words",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_app.AppTests.test_pdf_metadata_uses_publication_year_not_dataset_year",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_app.AppTests.test_pdf_upload_metadata_text_and_deduplication",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_app.AppTests.test_provider_failure_and_cross_origin_writes",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_app.AppTests.test_search_and_save_persist_across_restart",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_app.AppTests.test_summary_downloads_content_and_checks_citations",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_app.AppTests.test_upload_enriches_metadata_using_identifier_from_pdf",
+      "outcome": "passed"
+    }
+  ]
+}

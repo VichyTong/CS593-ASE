@@ -1,0 +1,83 @@
+test_analysis_uses_pdf_text_and_persists_and_caches (test_app.AppTests.test_analysis_uses_pdf_text_and_persists_and_caches) ... ok
+test_delete_preserves_shared_pdf_and_cascades_notes (test_app.AppTests.test_delete_preserves_shared_pdf_and_cascades_notes) ... ok
+test_edit_and_input_validation (test_app.AppTests.test_edit_and_input_validation) ... ok
+test_invalid_upload_and_unknown_paper_are_actionable (test_app.AppTests.test_invalid_upload_and_unknown_paper_are_actionable) ... ok
+test_llm_http_contract_and_provider_errors (test_app.AppTests.test_llm_http_contract_and_provider_errors) ... ok
+test_long_paper_context_includes_end_and_retrieves_evidence (test_app.AppTests.test_long_paper_context_includes_end_and_retrieves_evidence) ... ok
+test_missing_model_never_returns_canned_summary (test_app.AppTests.test_missing_model_never_returns_canned_summary) ... ok
+test_natural_title_search_does_not_require_stop_words (test_app.AppTests.test_natural_title_search_does_not_require_stop_words) ... ok
+test_pdf_metadata_uses_publication_year_not_dataset_year (test_app.AppTests.test_pdf_metadata_uses_publication_year_not_dataset_year) ... ok
+test_pdf_upload_metadata_text_and_deduplication (test_app.AppTests.test_pdf_upload_metadata_text_and_deduplication) ... ok
+test_provider_failure_and_cross_origin_writes (test_app.AppTests.test_provider_failure_and_cross_origin_writes) ... ok
+test_search_and_save_persist_across_restart (test_app.AppTests.test_search_and_save_persist_across_restart) ... ok
+test_summary_downloads_content_and_checks_citations (test_app.AppTests.test_summary_downloads_content_and_checks_citations) ... ok
+test_upload_enriches_metadata_using_identifier_from_pdf (test_app.AppTests.test_upload_enriches_metadata_using_identifier_from_pdf) ... ok
+test_arxiv_exact_id_search_and_repeated_query_cache (test_components.ComponentTests.test_arxiv_exact_id_search_and_repeated_query_cache) ... ok
+test_database_rolls_back_the_entire_failed_transaction (test_components.ComponentTests.test_database_rolls_back_the_entire_failed_transaction) ... ok
+test_empty_context_is_rejected_and_citation_ranges_are_parsed (test_components.ComponentTests.test_empty_context_is_rejected_and_citation_ranges_are_parsed) ... ok
+test_invalid_id_and_untrusted_pdf_redirect_are_rejected (test_components.ComponentTests.test_invalid_id_and_untrusted_pdf_redirect_are_rejected) ... ok
+test_llm_rejects_empty_malformed_and_truncated_responses (test_components.ComponentTests.test_llm_rejects_empty_malformed_and_truncated_responses) ... ok
+test_llm_rejects_insecure_remote_endpoint_before_sending (test_components.ComponentTests.test_llm_rejects_insecure_remote_endpoint_before_sending) ... ok
+test_long_context_is_bounded_and_samples_or_ranks_relevant_pages (test_components.ComponentTests.test_long_context_is_bounded_and_samples_or_ranks_relevant_pages) ... ok
+test_short_context_retains_all_text_and_original_page_numbers (test_components.ComponentTests.test_short_context_retains_all_text_and_original_page_numbers) ... ok
+test_basic_auth_requires_correct_credentials (test_validation.ValidationTests.test_basic_auth_requires_correct_credentials) ... ok
+test_cross_origin_changes_are_denied_but_same_origin_is_allowed (test_validation.ValidationTests.test_cross_origin_changes_are_denied_but_same_origin_is_allowed) ... ok
+test_failed_pdf_download_leaves_content_unset (test_validation.ValidationTests.test_failed_pdf_download_leaves_content_unset) ... ok
+test_invalid_analysis_payloads_are_client_errors_without_provider_calls (test_validation.ValidationTests.test_invalid_analysis_payloads_are_client_errors_without_provider_calls) ... 
+  test_invalid_analysis_payloads_are_client_errors_without_provider_calls (test_validation.ValidationTests.test_invalid_analysis_payloads_are_client_errors_without_provider_calls) (payload={'kind': []}) ... FAIL
+  test_invalid_analysis_payloads_are_client_errors_without_provider_calls (test_validation.ValidationTests.test_invalid_analysis_payloads_are_client_errors_without_provider_calls) (payload={'kind': {}}) ... FAIL
+test_invalid_metadata_is_rejected_without_changing_saved_record (test_validation.ValidationTests.test_invalid_metadata_is_rejected_without_changing_saved_record) ... ok
+test_invalid_save_payloads_do_not_create_records (test_validation.ValidationTests.test_invalid_save_payloads_do_not_create_records) ... ok
+test_invalid_search_parameters_are_client_errors (test_validation.ValidationTests.test_invalid_search_parameters_are_client_errors) ... 
+  test_invalid_search_parameters_are_client_errors (test_validation.ValidationTests.test_invalid_search_parameters_are_client_errors) (args={'q': 'testing', 'page': '²'}) ... FAIL
+test_invalid_uploads_report_errors_without_storing_files (test_validation.ValidationTests.test_invalid_uploads_report_errors_without_storing_files) ... ok
+test_llm_quota_error_is_not_cached_and_retry_can_succeed (test_validation.ValidationTests.test_llm_quota_error_is_not_cached_and_retry_can_succeed) ... ok
+test_missing_model_reports_setup_error_before_download (test_validation.ValidationTests.test_missing_model_reports_setup_error_before_download) ... ok
+test_missing_papers_are_404_for_all_paper_operations (test_validation.ValidationTests.test_missing_papers_are_404_for_all_paper_operations) ... ok
+test_pdf_without_loaded_content_is_actionable (test_validation.ValidationTests.test_pdf_without_loaded_content_is_actionable) ... ok
+test_search_accepts_documented_length_and_page_boundaries (test_validation.ValidationTests.test_search_accepts_documented_length_and_page_boundaries) ... ok
+test_search_timeout_is_actionable_and_leaves_library_unchanged (test_validation.ValidationTests.test_search_timeout_is_actionable_and_leaves_library_unchanged) ... ok
+test_analysis_warns_about_citations_outside_supplied_pages (test_workflows.WorkflowTests.test_analysis_warns_about_citations_outside_supplied_pages) ... ok
+test_analysis_without_citations_warns_and_retains_source_excerpts (test_workflows.WorkflowTests.test_analysis_without_citations_warns_and_retains_source_excerpts) ... ok
+test_arxiv_full_text_loads_once_and_survives_restart (test_workflows.WorkflowTests.test_arxiv_full_text_loads_once_and_survives_restart) ... ok
+test_configured_upload_uses_ai_metadata_json (test_workflows.WorkflowTests.test_configured_upload_uses_ai_metadata_json) ... ok
+test_deletion_cascades_analyses_and_preserves_a_shared_pdf (test_workflows.WorkflowTests.test_deletion_cascades_analyses_and_preserves_a_shared_pdf) ... ok
+test_duplicate_upload_reuses_record_and_stored_file (test_workflows.WorkflowTests.test_duplicate_upload_reuses_record_and_stored_file) ... ok
+test_home_and_status_expose_configuration_without_secrets (test_workflows.WorkflowTests.test_home_and_status_expose_configuration_without_secrets) ... ok
+test_library_persists_and_deduplicates_versions_across_restart (test_workflows.WorkflowTests.test_library_persists_and_deduplicates_versions_across_restart) ... ok
+test_metadata_edit_normalizes_and_persists_all_fields (test_workflows.WorkflowTests.test_metadata_edit_normalizes_and_persists_all_fields) ... ok
+test_question_is_trimmed_grounded_and_cached_across_restart (test_workflows.WorkflowTests.test_question_is_trimmed_grounded_and_cached_across_restart) ... ok
+test_real_pdf_upload_extracts_text_metadata_and_downloadable_bytes (test_workflows.WorkflowTests.test_real_pdf_upload_extracts_text_metadata_and_downloadable_bytes) ... ok
+test_search_parses_arxiv_and_links_saved_results_with_pagination (test_workflows.WorkflowTests.test_search_parses_arxiv_and_links_saved_results_with_pagination) ... ok
+test_summary_downloads_pdf_sends_grounded_prompt_and_persists_evidence (test_workflows.WorkflowTests.test_summary_downloads_pdf_sends_grounded_prompt_and_persists_evidence) ... ok
+test_upload_prefers_matching_arxiv_metadata_over_ai (test_workflows.WorkflowTests.test_upload_prefers_matching_arxiv_metadata_over_ai) ... ok
+test_upload_succeeds_with_pdf_metadata_during_arxiv_outage (test_workflows.WorkflowTests.test_upload_succeeds_with_pdf_metadata_during_arxiv_outage) ... ok
+
+======================================================================
+FAIL: test_invalid_analysis_payloads_are_client_errors_without_provider_calls (test_validation.ValidationTests.test_invalid_analysis_payloads_are_client_errors_without_provider_calls) (payload={'kind': []})
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/tong172/Desktop/projects/593-ASE/solutions/hw2/initial_stage/tests/test_validation.py", line 97, in test_invalid_analysis_payloads_are_client_errors_without_provider_calls
+    self.assertEqual(response.status_code, 400, response.json)
+AssertionError: 500 != 400 : {'error': 'Something went wrong on the server. Please try again.'}
+
+======================================================================
+FAIL: test_invalid_analysis_payloads_are_client_errors_without_provider_calls (test_validation.ValidationTests.test_invalid_analysis_payloads_are_client_errors_without_provider_calls) (payload={'kind': {}})
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/tong172/Desktop/projects/593-ASE/solutions/hw2/initial_stage/tests/test_validation.py", line 97, in test_invalid_analysis_payloads_are_client_errors_without_provider_calls
+    self.assertEqual(response.status_code, 400, response.json)
+AssertionError: 500 != 400 : {'error': 'Something went wrong on the server. Please try again.'}
+
+======================================================================
+FAIL: test_invalid_search_parameters_are_client_errors (test_validation.ValidationTests.test_invalid_search_parameters_are_client_errors) (args={'q': 'testing', 'page': '²'})
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/tong172/Desktop/projects/593-ASE/solutions/hw2/initial_stage/tests/test_validation.py", line 24, in test_invalid_search_parameters_are_client_errors
+    self.assertEqual(response.status_code, 400, response.json)
+AssertionError: 500 != 400 : {'error': 'Something went wrong on the server. Please try again.'}
+
+----------------------------------------------------------------------
+Ran 51 tests in 0.705s
+
+FAILED (failures=3)

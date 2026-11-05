@@ -1,0 +1,254 @@
+Papertrail initial generation and evaluation experiment notes
+
+Scope and status
+
+This is an experiment record for the requested initial stage, not the final
+homework report. The initial tests were frozen before their first execution.
+No test, helper, runner, or application source was changed after execution.
+The initial stage is complete; improvement rounds await the user's feedback.
+
+Requirements and existing context inspected
+
+The local Homework 2 assignment sheet describes initial generation, coverage,
+correctness review, and fault detection before later improvements. The user's
+current instruction limits this work to initial generation and evaluation.
+
+The application README documents arXiv discovery, persistent library storage,
+PDF uploads, LLM summaries, and paper Q&A. It also specifies metadata editing,
+deduplication, PDF download/deletion, context limits, citation warnings, service
+failure handling, and optional authentication. The Python implementation and
+Homework 1 tests were inspected; relevant frontend library filtering/sorting
+code was inspected to identify browser-only behavior outside Python coverage.
+
+The 14 existing Homework 1 methods cover representative workflows, persistence,
+deduplication, metadata edits, full-text grounding, cache reuse, citation warnings,
+shared-file deletion, context selection, provider errors, and origin checking.
+They do not detect the two validation bugs exposed by the new suite.
+
+Pre-existing Homework 2 files were already present when this stage began,
+including older initial and round1 tests and evidence. They were preserved and
+excluded from all three measurements. Earlier results and interaction notes
+are not evidence of the work performed for the current request. See the
+frozen manifest for their hashes and README.txt for the exact suite definitions.
+
+Generated tests and intended oracles
+
+The new suite uses unittest: 15 workflow methods, 14 validation/error methods,
+and 8 component methods, for 37 methods total. Parameter tables use subTest;
+the method count is not the count of all input combinations.
+
+Workflow tests check bibliographic fields and request pagination, version-aware
+save deduplication, ordering and persistence after creating a new app instance,
+normalized metadata edits, actual text extraction from a synthetic two-page PDF,
+byte-for-byte PDF downloads, duplicate-upload behavior, content loading once,
+summary and question HTTP payloads, persisted answers and source pages, cache
+reuse after creating a new app instance, metadata enrichment/fallback, and
+deletion of shared files and dependent analyses.
+
+Validation tests check both permitted and rejected search boundaries, malformed
+save/edit/analysis inputs, corrupt/scanned/encrypted PDFs, missing records and
+model configuration, simulated service outages and quota failures, auth, and
+cross-origin writes. Rejected edits are checked against the full prior record;
+rejected uploads are checked for both empty library state and absent PDF files.
+
+Component tests check transaction rollback, full/long/empty context selection,
+citation ranges, exact-ID search and process-cache reuse, unsafe redirects,
+endpoint restrictions, and malformed/empty/truncated/unauthorized LLM responses.
+Most service tests exercise real provider code with get/post mocked. A few
+tests deliberately mock app-level boundaries to isolate fallback or validation
+behavior. All expectations use documented behavior and synthetic known inputs;
+mocked model answers are checked for transport/storage, not scientific truth.
+
+Setup and execution
+
+The installed Python 3.11.4 environment already supplied all required packages.
+No dependency fix, test correction, application repair, or rerun after a code
+change was needed. Harness import paths, dotenv suppression, temporary storage,
+mocking, and network guards were configured before freezing the first suite.
+Details are in setup-notes.txt and evidence/setup.json.
+
+Actual execution order on November 2, 2026, America/Chicago:
+1. New initial suite: 19:46:38 to 19:46:39.
+2. Homework 1 only and combined: separate processes started at 19:46:48.
+The recorded three runs are the complete set of test executions for this stage.
+The combined run repeats the same frozen tests to measure cumulative scope;
+it is not an improvement iteration. All three used the unchanged application.
+
+No blocked network attempt occurred in any run. Dotenv was disabled, inherited
+credentials cleared, and only temporary SQLite/PDF storage and dummy keys used.
+Personal library records and PDFs were neither read nor written. Generated PDF
+fixtures were made in memory. Expected malformed-PDF diagnostics include an
+"EOF marker not found" warning; this is not a harness or test error.
+
+Actual method outcomes and fixed coverage scope
+
+Measurement        Methods  Passed  Failed  Failure events  Errors  Skipped
+Homework 1 only       14       14       0         0             0       0
+New HW2 initial      37       35       2         3             0       0
+HW1 plus new HW2     51       49       2         3             0       0
+
+Two parent methods fail because one has two failing subtests and the other has
+one. Thus unittest prints "failures=3" for 37/51 methods. There are two detected
+application defects, not three distinct bugs. No expected-failure or skip marker
+was used to conceal them. Initial-only and combined return process exit code 1;
+Homework 1 only returns 0.
+
+Measurement        Covered lines       Covered branch destinations
+Homework 1 only     418/522  80.08%      107/174  61.49%
+New HW2 initial     474/522  90.80%      135/174  77.59%
+HW1 plus new HW2    486/522  93.10%      143/174  82.18%
+
+All measurements include only app.py, database.py, pdf_tools.py, and providers.py
+under solutions/hw1. There is no JavaScript coverage claim. Coverage includes
+module imports and application error paths exercised by failing tests.
+The raw coverage.py combined percentage for the new suite is 87.50%, explaining
+the rounded 88% Cover value in coverage.txt; it is not the 90.80% line metric.
+
+New HW2 initial per-module measurements
+
+File              Lines                  Branch destinations
+app.py            241/247  97.57%         68/74   91.89%
+database.py        34/34  100.00%           2/2   100.00%
+pdf_tools.py       83/111  74.77%          31/52   59.62%
+providers.py      116/130  89.23%          34/46   73.91%
+
+Homework 1 tests cover 12 lines that the generated-only suite misses, mainly
+metadata heuristics and model reasoning configuration. The generated suite
+adds 68 executed lines to the Homework 1-only union. They are complementary;
+the larger percentage is not a comparison between initial and improved tests.
+
+Detected application bug 1
+
+Input: after saving a synthetic paper, POST /api/papers/<id>/analyze with
+{"kind": []} or {"kind": {}}. A dummy model is configured for this test, and
+both download and model request boundaries are mocked and verified unused.
+
+Expected: HTTP 400 with a client-facing validation error for an unsupported
+analysis kind. The README's analysis API accepts summary or question, and
+neighboring invalid-kind inputs use the existing "Choose summary or question"
+validation path. Structured JSON values are valid request syntax but invalid
+values for this field. This expected status is an explicit contract judgment,
+not a claim that the README enumerates these exact malformed JSON examples.
+
+Actual: HTTP 500 with the generic server error. Application diagnostics show
+TypeError: unhashable type: 'list' / 'dict' at app.py line 254. The handler does
+set membership on the value before checking its type.
+
+Detecting method:
+test_validation.ValidationTests.test_invalid_analysis_payloads_are_client_errors_without_provider_calls
+Two subtests fail, with the identical root cause. All other cases in this
+method reject invalid inputs correctly. No analysis is saved. These are
+application failures; no evidence indicates a fixture or assertion mistake.
+
+Detected application bug 2
+
+Input: GET /api/search?q=testing&page=%C2%B2 (page value is superscript two).
+
+Expected: HTTP 400 with an invalid-page message. Valid search pages are integers
+from 1 through 100; this character is not an integer accepted by int(). Other
+invalid pagination values are handled as client errors in the same endpoint.
+
+Actual: HTTP 500. Application diagnostics show ValueError: invalid literal for
+int() with base 10: '²' at app.py line 156. str.isdigit() accepts this character
+but int() rejects it. Search-provider code is never called.
+
+Detecting method:
+test_validation.ValidationTests.test_invalid_search_parameters_are_client_errors
+One subtest fails. This is an application input-validation defect, not an
+incorrect expected arXiv response or a live provider problem.
+
+Both defects recur in the independent combined-scope execution. Full assertion
+traces are in each run's test-output.txt; application stack traces are in
+diagnostics.txt. Application code and the failing tests were left unchanged.
+
+Test correctness and assertion quality review
+
+No incorrect input/expected-output pair was identified during review of the
+new suite. This is a source-and-requirements review judgment, not an independent
+proof of every oracle. In particular, failure status 400 is supported by the
+app's adjacent validation contract rather than accepting observed 500s as
+correct simply because that is what the implementation currently does.
+
+Strong checks include exact persisted metadata/history, downloaded bytes,
+rollback state, cache identity plus provider call counts, page-numbered context,
+source excerpts, and absence of state changes on rejected operations. The
+same fixture is reused for related workflow setup, but distinct methods assert
+different state transitions rather than only checking successful execution.
+
+The 14 legacy tests overlap with some new workflows, so cumulative test count
+overstates unique behavior coverage. Reporting generated-only results avoids
+attributing legacy coverage to the new tests. The new suite is not a replacement
+for the pre-existing suite, especially its metadata heuristics.
+
+Weak or limited assertions remain:
+- Homepage checks establish HTML delivery, branding, and a response header;
+  they do not establish navigation, keyboard behavior, layout, or accessibility.
+- Several error checks assert message substrings. They check an actionable
+  category, but do not fully verify the recovery instructions shown by the UI.
+- Exact response dictionaries and some context labels may be brittle under
+  legitimate additions or wording changes. That is maintenance risk, not a
+  demonstrated incorrect test in this snapshot.
+- The long-context test checks budget, a late summary page, and a matching
+  evidence page. It does not prove optimal retrieval, every retained passage,
+  default-budget boundaries, or selection quality for realistic documents.
+- Mocked LLM text can pass every transport/storage assertion while being
+  factually wrong. Citation membership checks cannot verify claim support.
+- Provider HTTP responses are simplified mocks. They do not establish actual
+  provider availability, billing behavior, XML variability, streaming timing,
+  request serialization by requests itself, or generated answer quality.
+- Multiple negative inputs share subtest methods; a failing status assertion
+  stops that subcase before later response assertions. Method count and failure
+  event count must therefore remain separate in later comparisons.
+
+Isolation, cache reset, dummy configuration, no real sleeping, and generated
+fixtures limit obvious environmental flakiness. Only these recorded executions
+were performed; no statistical stability claim or independent human review is
+made. Persistence is checked by reopening the app/database, not by launching
+a separate server process. No mutation testing or seeded-fault experiment was
+performed; fault-detection evidence consists of the two actual defects above.
+
+Remaining coverage gaps for the generated-only initial scope
+
+app.py: missing lines 25, 95, 208-209, 292, 304. The missing paths include a
+non-object metadata edit, unreadable non-arXiv content, AI metadata failure
+fallback, deleting a paper while an analysis response is in flight, and guarded
+server startup. HTTP 413 and an arXiv metadata non-match branch are also absent.
+Statement coverage of generic handlers is not evidence that all triggers work.
+
+pdf_tools.py: 28 missing lines and 21 missing branch destinations. Notably,
+20 MB / 150 page / complex-content / million-character rejection paths
+(18, 24, 29, 33), title extraction using prominent font sizes (41-52), and
+fallback title/author/year heuristics (65-89) remain insufficiently tested.
+The text-PDF fixture always has explicit title and author document metadata;
+that fixture choice explains much of this gap.
+
+providers.py: 14 missing lines and 12 missing branch destinations. Throttle
+waiting (26), punctuation-only search (34), malformed/error Atom entries
+(58-60), cache eviction (75), trusted redirect follow-up and redirect exhaustion
+(92, 100), oversized streamed downloads (98), direct unconfigured-client errors
+(122), optional reasoning setting (131), and malformed metadata JSON (161-164)
+remain uncovered. Cache hits are tested, but expiry and real elapsed-time
+throttling are not established. Request-error handling is exercised for search,
+PDF download, and some LLM failures, not every provider exception shape.
+
+database.py reaches all 34 measured statements and 2 branch destinations, but
+concurrency, competing writes, filesystem permission failures, schema evolution,
+and process crashes are not established by that result.
+
+Outside the measured Python scope, frontend filtering/sorting, navigation,
+dialogs, rendered Markdown escaping, citation-page jumps, mobile rendering,
+keyboard accessibility, live services, and real server process restarts remain
+untested. These cannot be inferred from the high backend coverage percentages.
+
+Preserved evidence and next-stage boundary
+
+The pre-execution frozen-inputs.zip and frozen-manifest.json retain exact source
+and test hashes. Each of the three original run directories retains raw text,
+native coverage data, JSON, and HTML. The final archive bundles these originals
+without replacing their outcomes. A post-run integrity record verifies frozen
+inputs and earlier Homework 2 artifacts unchanged. The Homework 1 Git diff is
+empty. No real library data was included in either archive.
+
+Only documentation, derived result summaries, and evidence packaging were added
+after the runs. No additional tests, assertion changes, fixes, improvement
+iterations, report drafting, commits, or pushes followed the evaluation.

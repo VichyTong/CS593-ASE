@@ -1,0 +1,18 @@
+Actual user request for this stage (English, copied from this chat)
+
+I am completing CS593 Homework 2: Test Generation and Improvement Using Coding Agents. Please keep our conversation and experiment notes in English so I can use genuine interaction examples in my report.
+
+My Homework 1 application is Papertrail, located at:
+`/Users/tong172/Desktop/projects/593-ASE/solutions/hw1`
+
+For this stage, generate and evaluate the initial test suite only.
+
+1. Inspect the application, its documented requirements, and its existing tests. Clearly distinguish pre-existing Homework 1 tests from tests newly generated for Homework 2.
+2. Generate meaningful, executable tests for the main functionality, including normal cases, edge cases, and error handling. Prefer the existing unittest framework unless there is a clear reason to change it.
+3. Use isolated temporary storage and mock external arXiv and LLM requests. Do not use my real library data or make paid API calls.
+4. Run the tests and measure coverage. State which application files and test suites are included in each measurement, so the same scope can be used for the final comparison.
+5. Preserve the initial test suite and its actual execution and coverage results before making substantive improvements. Document any setup fixes needed to make the tests runnable.
+6. Evaluate coverage gaps, test correctness, assertion quality, and any application bugs detected. Distinguish application bugs from incorrect tests. Passing tests alone do not establish correctness.
+7. Keep application code unchanged during this stage. Record observations and results honestly; do not invent outcomes or interaction history.
+
+Stop after the initial generation and evaluation. Summarize the evidence and remaining weaknesses, then wait for my feedback before beginning improvement round 1. Do not perform either improvement round or write the final report yet.

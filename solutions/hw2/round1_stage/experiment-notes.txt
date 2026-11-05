@@ -1,0 +1,283 @@
+Papertrail round 1 experiment notes
+
+This is the requested round 1 evaluation record, not the final homework report.
+Round 1 is complete. No round 2 work or application repair was performed.
+
+Feedback and strategy
+
+The actual user feedback is preserved in feedback-request.txt, with paragraph
+wrapping normalized. The user authorized only round 1 and specifically asked
+for PDF size/page/text boundaries, no orphaned storage after rejection, fallback
+metadata from PDFs without document metadata, and optional AI enrichment failure.
+They required retaining initial tests, application immutability, the two known
+validation failures, and a HW2-only comparison with the same coverage settings.
+
+The resulting strategy is requirements-guided PDF tests, not general coverage
+expansion. All 37 initial HW2 methods and initial_support.py were copied byte
+for byte into round1_stage/tests. Eight new methods and one PDF fixture helper
+were added. No initial or new test was corrected after the first round 1 run.
+The complete initial_stage directory and older experiments were left untouched.
+The previously existing solutions/hw2/tests/test_round1.py was neither executed
+nor used as a test source for this round.
+
+Setup and actual execution
+
+Python 3.11.4 and the initial stage's installed versions of Flask, pypdf,
+requests, python-dotenv, gunicorn, and coverage were reused. No package install,
+upgrade, dependency fix, import repair, or application change was needed.
+
+One pypdf-only fixture probe checked removal of the Info dictionary, line breaks,
+legal-comment padding, and known single-Tj lengths. Its real output is in
+evidence/fixture-probe.txt. It did not import the application. All round 1 code
+was then frozen, with the application snapshot, before application tests ran.
+
+There was exactly one round 1 application-suite execution:
+  solutions/hw1/.venv/bin/python -B solutions/hw2/round1_stage/run_round1.py --output solutions/hw2/round1_stage/evidence/round1-only
+
+It started November 2, 2026 at 20:39:41 America/Chicago and finished at 20:39:55.
+Unittest reported 13.318 seconds for the 45 methods. The process exited 1 because
+of genuine assertion failures. No application suite was rerun after that result.
+The initial measurement is the preserved original, not a newly executed baseline.
+
+Dotenv loading was disabled, inherited credentials/configuration cleared, and
+only temporary SQLite/PDF storage and dummy credentials used. All real HTTP and
+socket connections were blocked. The runner recorded zero network attempts.
+No personal library records or PDFs were read or written. Temporary storage
+was removed by test cleanup. The known corrupt-PDF test emitted the same
+'EOF marker not found' diagnostic as initially; this is not a setup failure.
+
+Outcomes for the primary HW2-only comparison
+
+Suite      Methods  Passed  Failed methods  Failed subtests  Ordinary failures
+Initial       37       35         2                3                 0
+Round 1       45       42         3                3                 1
+
+Unittest therefore reports 3 failure events initially and 4 in round 1. There
+are no errors, skips, or expected-failure annotations in either suite. All 35
+previously passing methods still pass; the same two initial methods still fail
+on the same three inputs. Seven of the eight new methods pass. The new failure
+is an ordinary method failure for a metadata extraction defect, not a fourth
+failing subtest. Three distinct application defects are exposed in round 1.
+
+The method pass rate decreases from 94.59% to 93.33% because a new test detects
+another defect while application code remains unchanged. This does not indicate
+that a previously passing method regressed, nor does it justify weakening the
+new expectation. Passing methods alone would not establish test correctness.
+
+Fixed coverage scope and settings
+
+Both sides measure exactly these unchanged files under solutions/hw1:
+  app.py (247 executable statements, 74 branch destinations)
+  database.py (34 statements, 2 branch destinations)
+  pdf_tools.py (111 statements, 52 branch destinations)
+  providers.py (130 statements, 46 branch destinations)
+
+Both use coverage.py 7.17.0, branch=True, config_file=False, the same explicit
+include list, no omit list, and tracing before application import. Neither side
+includes the 14 legacy HW1 methods, the older experiments, test code, templates,
+frontend JavaScript/CSS, submission tooling, or dependencies as coverage targets.
+The guarded server startup statement inside app.py remains included.
+
+Overall                 Initial                Round 1
+Line coverage           474/522  90.80%         505/522  96.74%
+Branch destinations     135/174  77.59%         151/174  86.78%
+
+Per-module line coverage
+File                    Initial                Round 1
+app.py                  241/247  97.57%         243/247  98.38%
+database.py               34/34 100.00%           34/34 100.00%
+pdf_tools.py              83/111 74.77%          109/111 98.20%
+providers.py             116/130 89.23%          119/130 91.54%
+
+Per-module branch coverage
+File                    Initial                Round 1
+app.py                    68/74 91.89%            68/74 91.89%
+database.py                 2/2 100.00%              2/2 100.00%
+pdf_tools.py               31/52 59.62%            46/52 88.46%
+providers.py               34/46 73.91%            35/46 76.09%
+
+Overall gains are 31 statements and 16 branch destinations, or 5.94 and 9.20
+percentage points respectively. No previously executed line or branch was lost.
+The PDF module gains 26 statements and 15 branch destinations, the largest
+change and the intended focus of this round. The other new statement coverage
+comes from AI fallback (app.py 208-209) and malformed AI metadata parsing
+(providers.py 161, 163-164).
+
+app.py branch coverage does not increase: the new AI exception fallback executes
+previously missed statements, while the same six measured branch destinations
+remain missing. Coverage.py's branch metric does not count every possible
+exception trigger as a distinct branch. database.py was already 100% on both
+metrics and stays there, although the new rejection assertions add behavioral
+checks on its state. These unchanged percentages are expected, not hidden.
+
+The rounded coverage.txt Cover value is 94% for round 1. It combines statements
+and branch destinations: 656/696 = 94.25%, rather than the 96.74% line-only metric.
+Raw counts, per-file deltas, and missing paths are in evidence/comparison.json.
+
+Tests added and what they establish
+
+All eight are in tests/test_pdf_round1.py. No tests were corrected or removed.
+
+1. test_pdf_file_size_boundary_is_accepted_and_one_extra_byte_is_rejected
+   Exercises a real readable PDF padded to exactly 20 MiB (201, stored content
+   and file hash correct) and 20 MiB + 1 byte (400, actionable size error, no
+   paper/analysis record or uploads entry). No threshold/extractor is mocked.
+   See the unit ambiguity below; this checks the configured binary convention.
+2. test_oversized_multipart_request_returns_413_without_storage
+   Exceeds the real 21 MiB transport cap, separately from the PDF file check.
+   Checks HTTP 413, the size message, absent external calls, empty SQLite state,
+   and no orphaned file. Multipart overhead is included by the test client.
+3. test_page_count_accepts_one_and_150_and_rejects_zero_and_151
+   Real 1- and 150-page PDFs retain every page number and its unique text;
+   real 0- and 151-page PDFs are rejected with the page-count error and no
+   storage. This covers both ends without hundreds of large page contents.
+4. test_total_extracted_text_at_limit_and_one_character_either_side
+   Two single-Tj pages total 999,999, 1,000,000, and 1,000,001 ASCII characters.
+   The first two retain exact character counts and per-page text hashes; the
+   last is rejected without storage. This tests the cumulative, not per-page,
+   limit. Single-Tj fixture construction adds no unexpected line separator.
+5. test_pdf_without_document_metadata_extracts_clear_title_byline_and_date
+   The entire Info dictionary is absent and asserted absent with PdfReader.
+   A 24 pt title, separate 12 pt two-person byline, affiliation, labeled 2024
+   publication, explicit abstract, and introduction establish the gold values.
+   Checks all metadata, source text, PDF bytes, and agreement of API and SQLite.
+   Dataset year 2018 is not accepted as publication evidence. No provider runs.
+6. test_multiline_prominent_title_is_not_misidentified_as_an_author
+   Splits the same 24 pt title over two heading lines above the 12 pt byline.
+   The intended title is the joined heading, and only the two byline people
+   are authors. Checks real extraction and stored state; exposes the new bug.
+7. test_absent_author_and_publication_year_are_not_invented
+   Uses a no-Info PDF with title/abstract but no byline or publication evidence.
+   Checks empty authors and null year despite the dataset year in prose,
+   plus preserved title, abstract, PDF, and state. No provider runs.
+8. test_optional_ai_metadata_failures_preserve_pdf_fallback_and_review_notice
+   Four subtests fail at distinct boundaries: HTTP timeout, malformed JSON,
+   valid JSON of the wrong shape, and an object with invalid metadata fields.
+   Only HTTP post is mocked; the actual LLM client, JSON parsing, field
+   validation, PDF extraction, route, and database run. Each case uploads
+   successfully, returns an AI-unavailable review notice, retains PDF-derived
+   title/authors/year/abstract and bytes/pages, saves no analysis, survives a
+   fresh app instance, and deduplicates without another AI call. Assertions
+   check the provider URL, model, timeout, dummy authorization, instructions,
+   and evidence text. No arXiv request occurs for these identifier-free PDFs.
+
+All five rejected boundary/request uploads passed the no-orphan assertions.
+The four enrichment failures passed their fallback and persistence assertions.
+All fixtures are synthesized on demand. File limits use legal comment padding;
+large text uses known ASCII strings, avoiding slow heavyweight real-world PDFs.
+See design-and-setup.txt for the pre-execution oracle reasoning and fixture
+construction, which was not rewritten to accept the application's output.
+
+Newly detected metadata defect
+
+Detecting method:
+test_pdf_round1.PDFMetadataTests.test_multiline_prominent_title_is_not_misidentified_as_an_author
+
+Fixture evidence:
+  24 pt: Reliable Storage for
+  24 pt: Research Libraries
+  12 pt: Dana Tester and Evan Researcher
+  10 pt: Institute of Synthetic Studies
+  10 pt: Published in the Synthetic Systems Conference 2024
+
+Expected authors: ['Dana Tester', 'Evan Researcher']
+Actual persisted/returned authors:
+  ['Research Libraries', 'Dana Tester', 'Evan Researcher']
+
+The joined title is correct. Assertions before the failure confirm success
+status, readable text, a single exact stored PDF, page order, and agreement
+between returned metadata and SQLite, so the spurious author is persisted,
+not merely a display issue. The authors equality assertion then fails. Later
+year/abstract gold assertions in that helper do not execute in this failing
+case; the simple-layout case checks them separately.
+
+Source inspection explains the result: extract_metadata first takes one title
+line and scans following lines for author-like word counts (pdf_tools.py
+64-77). The second title line has two words and is included as an author.
+extract_pdf later joins the prominent title lines (41-52) but does not revisit
+the author list. This explanation comes from code review and the actual
+failure; no application patch or extra reproduction run was performed.
+
+This is a metadata accuracy defect on a clearly specified synthetic layout,
+not an incorrect fixture expectation. The README describes extraction as best
+effort and permits user edits, so the finding should not be overstated as a
+crash or a guarantee about arbitrary multi-line PDFs. Here the fixture roles
+are explicit: 'Research Libraries' is a heading continuation, not a person.
+
+Known failures retained
+
+The original analysis-kind test still fails on {'kind': []} and {'kind': {}}:
+HTTP 500 instead of a validation 400, with unhashable list/dict exceptions at
+app.py 254. The original search-validation test still fails for page='²':
+HTTP 500 instead of 400, with int() rejecting a character accepted by isdigit()
+at app.py 156. These account for the three failing subtests. Neither test was
+weakened, skipped, or marked as expected failure. Full traces remain in the raw
+unittest output and diagnostics. No additional defects were detected beyond
+the new metadata defect and those two known validation defects.
+
+Correctness review and ambiguity handling
+
+No incorrect new expected value or fixture/setup failure was identified. This
+is an agent review against the stated fixture roles and intended behavior, not
+an independent human oracle certification. The failing metadata assertion must
+not be 'fixed' by accepting title words as author names.
+
+The binary meaning of '20 MB', inclusive-vs-strict error wording, priority among
+multiple plausible publication dates, Unicode/NUL counting, exact policies for
+unknown title placeholders, and general metadata accuracy guarantees remain
+underspecified. This round records those issues and avoids choosing a date
+priority, normalizing Unicode, or specifying unknown-title behavior from code.
+It conditionally tests the current 20 MiB limit convention; that does not resolve
+the decimal-vs-binary product requirement. The clear metadata cases have one
+labeled publication year, explicit byline roles, and no conflicting title.
+
+Assertions now address data and file state as well as statuses and metadata.
+Per-case storage is fresh, so failed subtests do not poison later ones. Original
+tests remain byte-identical and all previously passing outcomes are retained.
+Some inherited limitations remain: message substring assertions, mocked model
+answers, simplified HTTP responses, and homepage delivery checks. No fault was
+seeded and no application mutation testing was performed.
+
+Remaining weaknesses after round 1
+
+- pdf_tools.py still misses statements 29 (decoded-page complexity rejection)
+  and 79 (an author-candidate rejection). Six branch destinations remain,
+  including no-prominent-title / unsuitable-title paths, exhausted author
+  candidates, and a context-selection budget-skip path. Readability and page
+  complexity numeric policies are not fully specified by the README.
+- The synthetic limits establish ASCII counts and application-managed storage
+  behavior. They do not establish safe handling of pathological compressed PDF
+  objects, Unicode normalization, all encrypted-PDF variations, or filesystem
+  failures after a write. A failed insertion after writing bytes is untested.
+- The single-font, simple-layout metadata fixtures omit complex columns,
+  equations, names with suffixes or unusual scripts, and conflicting dates.
+  The multi-line title defect remains unfixed as required.
+- app.py still misses non-object metadata-edit handling (25), missing readable
+  upload content (95), deletion during analysis (292), and server startup (304).
+  Its arXiv metadata non-match branch and remaining conditional paths persist.
+- providers.py retains 11 missed statements: throttle waiting, punctuation-only
+  search, malformed/error Atom entries, eviction, trusted redirect follow-up,
+  download size limits, redirect exhaustion, direct unconfigured-client errors,
+  and optional reasoning settings. PDF upload size coverage is not streamed
+  arXiv download size coverage. Cache expiry and concurrent service behavior
+  remain unestablished.
+- Database coverage remains 100%, but concurrent writes, process crashes,
+  disk failures, and schema migration behavior are not established by it.
+- Frontend interactions, accessibility, layout, real HTTP server restarts,
+  live service behavior, and actual LLM answer/metadata quality are outside
+  this automated evidence. High coverage still does not prove correctness.
+
+Preservation and stop point
+
+The full initial_stage inventory and content hashes were captured before this
+round, along with the older experiment artifacts. Round 1 code and inputs were
+frozen before execution. The original baseline evidence is reused unchanged,
+with hash-identical reference copies included in the new directory. The raw
+round 1 output, native coverage database, JSON/text/HTML coverage, diagnostics,
+and outcome events remain intact. Derived comparison and integrity records are
+separate from these originals; the final archive includes all evidence.
+
+Only documentation, comparisons, integrity checks, and packaging followed the
+single round 1 run. Application code, initial_stage, and old experiments remain
+unchanged. No additional tests, correction pass, second improvement round,
+final report, commit, or push followed the evaluation. Await user feedback.

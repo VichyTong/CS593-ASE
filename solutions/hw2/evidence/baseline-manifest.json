@@ -1,0 +1,10 @@
+{
+  "git_base": "cfad603",
+  "source_sha256": {
+    "app.py": "a948cc1006a7cd1ca75068f606fe206812cf26c0d220d2c64479ed28f97a873b",
+    "database.py": "3e153005810e995971dfa6c8392353a67c6c8295f8df48f3a397de12678678e3",
+    "pdf_tools.py": "e9635f2032566c0c01587308b33d13dc9a12a01c741f39aea2a5ea83fce205ff",
+    "providers.py": "ba5fe1427719500a87dd43cc974ffb42e2b9768d64d5a96660f63aa4e557dd38"
+  },
+  "scope": "Four backend application modules; templates/static reused unchanged; no env, data, or credentials."
+}

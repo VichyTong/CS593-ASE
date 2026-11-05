@@ -1,0 +1,120 @@
+--- solutions/hw2/round1_stage/tests/test_components.py
++++ solutions/hw2/round2_stage/tests/test_components.py
+@@ -68,7 +68,8 @@
+         with patch('providers.requests.get', return_value=response) as get:
+             with self.assertRaisesRegex(PaperError, 'Unexpected PDF location'):
+                 providers.download_paper('2501.01234')
+-        get.assert_called_once()
++        get.assert_called_once_with('https://arxiv.org/pdf/2501.01234',
++                                    timeout=(10, 60), stream=True, allow_redirects=False)
+ 
+     def test_llm_rejects_insecure_remote_endpoint_before_sending(self):
+         llm = self.enable_llm()
+--- solutions/hw2/round1_stage/tests/test_validation.py
++++ solutions/hw2/round2_stage/tests/test_validation.py
+@@ -5,6 +5,7 @@
+ from unittest.mock import patch
+ 
+ import requests
++import database
+ from initial_support import IsolatedCase, PAPER, llm_response, pdf_bytes
+ from app import create_app
+ 
+@@ -112,39 +113,86 @@
+         self.assertEqual(self.detail(paper['id'])['analyses'], [])
+ 
+     def test_search_timeout_is_actionable_and_leaves_library_unchanged(self):
+-        with patch('providers.requests.get', side_effect=requests.Timeout('synthetic timeout')):
++        saved = self.save()
++        before = self.detail(saved['id'])
++        with patch('providers.requests.get', side_effect=requests.Timeout('synthetic timeout')) as get:
+             response = self.client.get('/api/search?q=testing')
+         self.assertEqual(response.status_code, 400)
++        self.assertEqual(set(response.json), {'error'})
+         self.assertIn('arXiv is unavailable', response.json['error'])
+-        self.assertEqual(self.client.get('/api/papers').json['papers'], [])
++        get.assert_called_once()
++        self.assertEqual(get.call_args.args, ('https://export.arxiv.org/api/query',))
++        self.assertEqual(get.call_args.kwargs['params'], {
++            'start': 0, 'max_results': 10, 'search_query': 'all:testing',
++            'sortBy': 'relevance', 'sortOrder': 'descending',
++        })
++        self.assertEqual(self.detail(saved['id']), before)
++        self.assertEqual([p['id'] for p in self.client.get('/api/papers').json['papers']], [saved['id']])
++        self.assertEqual(list((self.directory / 'uploads').iterdir()), [])
+ 
+     def test_failed_pdf_download_leaves_content_unset(self):
+         paper = self.save()
+-        with patch('providers.requests.get', side_effect=requests.ConnectionError('synthetic failure')):
++        before = self.detail(paper['id'])
++        with patch('providers.requests.get', side_effect=requests.ConnectionError('synthetic failure')) as get:
+             response = self.client.post(f"/api/papers/{paper['id']}/content")
+         self.assertEqual(response.status_code, 400)
++        self.assertEqual(set(response.json), {'error'})
+         self.assertIn('Could not download', response.json['error'])
++        get.assert_called_once_with('https://arxiv.org/pdf/2501.01234',
++                                    timeout=(10, 60), stream=True, allow_redirects=False)
+         detail = self.detail(paper['id'])
+-        self.assertFalse(detail['has_pdf'])
+-        self.assertEqual(detail['pages'], [])
+-        self.assertEqual(self.pdf_files(), [])
++        self.assertEqual(detail, before)
++        self.assertFalse(detail['has_full_text'])
++        self.assertEqual(list((self.directory / 'uploads').rglob('*')), [])
++        with database.connect(self.app.extensions['db_path']) as db:
++            row = db.execute('SELECT pdf_path,pages FROM papers WHERE id=?', (paper['id'],)).fetchone()
++            self.assertIsNone(row['pdf_path'])
++            self.assertEqual(row['pages'], '[]')
++            self.assertEqual(db.execute('SELECT COUNT(*) FROM analyses').fetchone()[0], 0)
+ 
+     def test_llm_quota_error_is_not_cached_and_retry_can_succeed(self):
+         paper = self.upload()
+         self.enable_llm()
+         endpoint = f"/api/papers/{paper['id']}/analyze"
++        before = self.detail(paper['id'])
++        answer = 'The HAWK benchmark contains 72 synthetic papers. [p. 2]'
+         with patch('providers.requests.post', side_effect=[
+-                llm_response(status=429), llm_response(),
++                llm_response(status=429), llm_response(answer),
+         ]) as post:
+             failed = self.client.post(endpoint, json={'kind': 'summary'})
+             self.assertEqual(failed.status_code, 400)
++            self.assertEqual(set(failed.json), {'error'})
+             self.assertIn('quota', failed.json['error'])
+-            self.assertEqual(self.detail(paper['id'])['analyses'], [])
++            self.assertEqual(self.detail(paper['id']), before)
++            self.assertEqual(post.call_count, 1)
++            with database.connect(self.app.extensions['db_path']) as db:
++                self.assertEqual(db.execute('SELECT COUNT(*) FROM analyses').fetchone()[0], 0)
+             succeeded = self.client.post(endpoint, json={'kind': 'summary'})
+-        self.assertEqual(succeeded.status_code, 200, succeeded.json)
+-        self.assertFalse(succeeded.json['cached'])
++            self.assertEqual(succeeded.status_code, 200, succeeded.json)
++            self.assertFalse(succeeded.json['cached'])
++            self.assertEqual(post.call_count, 2)
++            cached = self.client.post(endpoint, json={'kind': 'summary'})
+         self.assertEqual(post.call_count, 2)
+-        self.assertEqual(len(self.detail(paper['id'])['analyses']), 1)
++        self.assertEqual(cached.status_code, 200, cached.json)
++        self.assertTrue(cached.json['cached'])
++        self.assertEqual(cached.json['analysis'], succeeded.json['analysis'])
++        analysis = succeeded.json['analysis']
++        self.assertEqual(analysis['answer'], answer)
++        self.assertEqual(analysis['kind'], 'summary')
++        self.assertEqual(analysis['question'], '')
++        self.assertEqual(analysis['model'], 'unit-test-model')
++        self.assertEqual(analysis['warning'], '')
++        self.assertEqual(analysis['coverage'], 'Full extracted text')
++        self.assertEqual([s['page'] for s in analysis['sources']], [2])
++        self.assertIn('HAWK benchmark', analysis['sources'][0]['text'])
++        self.assertEqual(self.detail(paper['id']), dict(before, analyses=[analysis]))
++        for request in post.call_args_list:
++            self.assertEqual(request.args, ('https://llm.example.invalid/v1/chat/completions',))
++            self.assertEqual(request.kwargs['json']['model'], 'unit-test-model')
++            self.assertIn('72 synthetic papers', request.kwargs['json']['messages'][1]['content'])
++        with database.connect(self.app.extensions['db_path']) as db:
++            saved = db.execute('SELECT answer,kind FROM analyses WHERE paper_id=?', (paper['id'],)).fetchall()
++            self.assertEqual([(row['answer'], row['kind']) for row in saved], [(answer, 'summary')])
+ 
+     def test_missing_papers_are_404_for_all_paper_operations(self):
+         self.enable_llm()

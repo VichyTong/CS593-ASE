@@ -1,0 +1,17 @@
+{
+  "python": "3.11.4",
+  "packages": {
+    "Flask": "3.1.3",
+    "pypdf": "6.19.0",
+    "requests": "2.34.2",
+    "python-dotenv": "1.2.4",
+    "gunicorn": "26.2.0",
+    "coverage": "7.17.0"
+  },
+  "archive_sha256": "0e8e1f6db9567cd98ce0c32b99bed5d7a5e86a9982b427efe4f639b57c051897",
+  "syntax_check": "All frozen Python files parsed; no application tests executed during parsing.",
+  "fixture_probe": "One pypdf-only fixture probe recorded before freezing; no application import.",
+  "packages_installed_or_upgraded": [],
+  "application_changes": [],
+  "initial_test_corrections": []
+}

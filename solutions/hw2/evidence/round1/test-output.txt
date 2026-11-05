@@ -1,0 +1,50 @@
+test_delete_removes_library_record (test_initial.InitialTests.test_delete_removes_library_record) ... ok
+test_edit_round_trips_all_metadata (test_initial.InitialTests.test_edit_round_trips_all_metadata) ... ok
+test_homepage_serves_application (test_initial.InitialTests.test_homepage_serves_application) ... ok
+test_invalid_pdf_is_rejected_without_saving (test_initial.InitialTests.test_invalid_pdf_is_rejected_without_saving) ... ok
+test_missing_paper_returns_actionable_json (test_initial.InitialTests.test_missing_paper_returns_actionable_json) ... ok
+test_question_passes_exact_task_and_saves_answer (test_initial.InitialTests.test_question_passes_exact_task_and_saves_answer) ... ok
+test_real_pdf_upload_extracts_metadata_and_text (test_initial.InitialTests.test_real_pdf_upload_extracts_metadata_and_text) ... ok
+test_saved_metadata_survives_restart (test_initial.InitialTests.test_saved_metadata_survives_restart) ... ok
+test_saving_same_paper_is_idempotent (test_initial.InitialTests.test_saving_same_paper_is_idempotent) ... ok
+test_search_preserves_bibliographic_fields (test_initial.InitialTests.test_search_preserves_bibliographic_fields) ... ok
+test_summary_uses_pdf_content_and_is_saved (test_initial.InitialTests.test_summary_uses_pdf_content_and_is_saved) ... ok
+test_unconfigured_model_reports_setup_error (test_initial.InitialTests.test_unconfigured_model_reports_setup_error) ... ok
+test_allowed_redirect_streams_exact_bytes (test_round1.DownloadProviderTests.test_allowed_redirect_streams_exact_bytes) ... ok
+test_invalid_id_never_starts_download (test_round1.DownloadProviderTests.test_invalid_id_never_starts_download) ... ok
+test_network_failure_has_manual_upload_guidance (test_round1.DownloadProviderTests.test_network_failure_has_manual_upload_guidance) ... ok
+test_redirect_loop_is_bounded (test_round1.DownloadProviderTests.test_redirect_loop_is_bounded) ... ok
+test_redirect_rejects_untrusted_hosts_http_and_ports (test_round1.DownloadProviderTests.test_redirect_rejects_untrusted_hosts_http_and_ports) ... ok
+test_streaming_download_rejects_over_twenty_megabytes (test_round1.DownloadProviderTests.test_streaming_download_rejects_over_twenty_megabytes) ... ok
+test_http_contract_sends_context_and_question (test_round1.LLMProviderTests.test_http_contract_sends_context_and_question) ... ok
+test_insecure_or_credential_bearing_endpoints_are_rejected (test_round1.LLMProviderTests.test_insecure_or_credential_bearing_endpoints_are_rejected) ... ok
+test_malformed_and_empty_provider_payloads_are_rejected (test_round1.LLMProviderTests.test_malformed_and_empty_provider_payloads_are_rejected) ... ok
+test_metadata_parses_fenced_json_and_rejects_invalid_shapes (test_round1.LLMProviderTests.test_metadata_parses_fenced_json_and_rejects_invalid_shapes) ... ok
+test_missing_credentials_prevent_network_request (test_round1.LLMProviderTests.test_missing_credentials_prevent_network_request) ... ok
+test_provider_credentials_and_quota_errors_are_specific (test_round1.LLMProviderTests.test_provider_credentials_and_quota_errors_are_specific) ... ok
+test_timeout_does_not_return_fake_answer (test_round1.LLMProviderTests.test_timeout_does_not_return_fake_answer) ... ok
+test_truncated_answer_is_rejected (test_round1.LLMProviderTests.test_truncated_answer_is_rejected) ... ok
+test_citation_ranges_and_invalid_ranges_are_bounded (test_round1.PDFAndContextTests.test_citation_ranges_and_invalid_ranges_are_bounded) ... ok
+test_corrupt_pdf_has_readable_failure_message (test_round1.PDFAndContextTests.test_corrupt_pdf_has_readable_failure_message) ... ok
+test_empty_context_is_rejected (test_round1.PDFAndContextTests.test_empty_context_is_rejected) ... ok
+test_image_only_pdf_requests_ocr (test_round1.PDFAndContextTests.test_image_only_pdf_requests_ocr) ... ok
+test_long_summary_samples_end_and_respects_budget (test_round1.PDFAndContextTests.test_long_summary_samples_end_and_respects_budget) ... ok
+test_metadata_fallback_uses_publication_year (test_round1.PDFAndContextTests.test_metadata_fallback_uses_publication_year) ... ok
+test_oversized_pdf_is_rejected_before_parsing (test_round1.PDFAndContextTests.test_oversized_pdf_is_rejected_before_parsing) ... ok
+test_password_protected_pdf_is_actionable (test_round1.PDFAndContextTests.test_password_protected_pdf_is_actionable) ... ok
+test_question_retrieval_selects_late_relevant_evidence (test_round1.PDFAndContextTests.test_question_retrieval_selects_late_relevant_evidence) ... ok
+test_short_paper_context_preserves_all_text_and_page_markers (test_round1.PDFAndContextTests.test_short_paper_context_preserves_all_text_and_page_markers) ... ok
+test_zero_and_over_limit_page_counts_are_rejected (test_round1.PDFAndContextTests.test_zero_and_over_limit_page_counts_are_rejected) ... ok
+test_arxiv_error_entry_does_not_look_like_empty_success (test_round1.SearchProviderTests.test_arxiv_error_entry_does_not_look_like_empty_success) ... ok
+test_atom_feed_maps_real_bibliographic_fields (test_round1.SearchProviderTests.test_atom_feed_maps_real_bibliographic_fields) ... ok
+test_empty_token_query_is_actionable (test_round1.SearchProviderTests.test_empty_token_query_is_actionable) ... ok
+test_expired_cache_refreshes_and_searches_are_throttled (test_round1.SearchProviderTests.test_expired_cache_refreshes_and_searches_are_throttled) ... ok
+test_fresh_search_cache_avoids_second_request (test_round1.SearchProviderTests.test_fresh_search_cache_avoids_second_request) ... ok
+test_identifiers_and_arxiv_links_use_id_lookup (test_round1.SearchProviderTests.test_identifiers_and_arxiv_links_use_id_lookup) ... ok
+test_keyword_query_pagination_sort_and_stop_words (test_round1.SearchProviderTests.test_keyword_query_pagination_sort_and_stop_words) ... ok
+test_timeout_and_invalid_xml_become_actionable_errors (test_round1.SearchProviderTests.test_timeout_and_invalid_xml_become_actionable_errors) ... ok
+
+----------------------------------------------------------------------
+Ran 45 tests in 0.260s
+
+OK
