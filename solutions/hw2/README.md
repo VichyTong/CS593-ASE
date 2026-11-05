@@ -1,6 +1,6 @@
 # Homework 2: Test Generation and Improvement Using Coding Agents
 
-This submission evaluates Codex-generated tests for the Papertrail application from Homework 1. It includes initial generation, two separately guided improvement rounds, English interaction evidence, coverage measurements, and the final report.
+This submission evaluates Codex-generated tests for the Papertrail application from Homework 1. It includes initial generation, two separately guided improvement rounds, conversation records, coverage measurements, and the final report.
 
 - [Final PDF report](docs/hw2-report.pdf)
 - [Editable LaTeX source](docs/overleaf-report.tex)
@@ -68,8 +68,8 @@ The final runner verifies source hashes and the complete inventories of earlier 
 | Directory | Role |
 | --- | --- |
 | `initial_stage/` | The initial 37-method HW2 suite, actual initial request, execution results, and frozen evidence. |
-| `round1_stage/` | The 45-method PDF-focused improvement, actual English feedback, results, and evidence. |
-| `round2_stage/` | The final 55-method suite, actual English feedback, strengthened assertions, results, and evidence. |
+| `round1_stage/` | The 45-method PDF-focused improvement, recorded feedback, results, and evidence. |
+| `round2_stage/` | The final 55-method suite, recorded feedback, strengthened assertions, results, and evidence. |
 | `docs/` | Final PDF report and the Overleaf-compatible LaTeX source. |
 | `tests/`, `evidence/`, and `run_experiment.py` at this directory's top level | Earlier artifacts excluded from the reported experiment; retained because the frozen manifests protect them. |
 
